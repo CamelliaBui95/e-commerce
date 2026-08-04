@@ -5,6 +5,8 @@ import java.util.UUID;
 import camellia.ecommerce.inventory_service.enums.Category;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Builder;
@@ -17,6 +19,7 @@ import lombok.Data;
 public class Product {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column(nullable = false)
@@ -27,12 +30,12 @@ public class Product {
 
     @Column(nullable = false)
     @Builder.Default
-    private long numberInStock = 0;
+    private Integer numberInStock = 0;
 
     @Column(nullable = false)
     @Builder.Default
-    private int price = 0;
-    
+    private Integer price = 0;
+
     @Column(nullable = false)
     private Category category;
 
