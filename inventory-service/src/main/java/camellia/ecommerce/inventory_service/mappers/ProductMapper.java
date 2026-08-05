@@ -1,5 +1,7 @@
 package camellia.ecommerce.inventory_service.mappers;
 
+import java.util.List;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -11,6 +13,8 @@ public interface ProductMapper {
 
     ProductDto toDto(Product product);
 
-    @Mapping(target = "publicId", ignore = true)
+    @Mapping(target = "id", ignore = true)
     Product toEntity(ProductDto productDto);
+
+    List<ProductDto> toDtoList(List<Product> products);
 }

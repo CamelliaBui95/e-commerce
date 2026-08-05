@@ -14,7 +14,7 @@ import lombok.Setter;
 @Getter
 public class ProductDto {
 
-    @JsonProperty("public_id")
+    @JsonProperty("id")
     @JsonInclude(Include.NON_EMPTY)
     private UUID publicId;
 

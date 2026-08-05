@@ -1,7 +1,9 @@
 package camellia.ecommerce.inventory_service.services;
 
+import java.util.List;
 import java.util.UUID;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import camellia.ecommerce.inventory_service.dtos.ProductDto;
@@ -25,5 +27,17 @@ public class ProductService {
         newProduct.setPublicId(UUID.randomUUID());
 
         return productRepository.save(newProduct);
+    }
+
+    public ProductDto findByPublicId(UUID publicId) {
+        Product product = productRepository.findByPublicId(publicId);
+
+        return mapper.toDto(product);
+    }
+
+    public List<ProductDto> findAll(Pageable page) {
+        List<Product> products = productRepository.findAll(page).getContent();
+
+        return mapper.toDtoList(products);
     }
 }

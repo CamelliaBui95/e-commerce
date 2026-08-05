@@ -9,10 +9,17 @@ import camellia.ecommerce.inventory_service.services.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Slf4j
 @RestController
@@ -23,8 +30,32 @@ public class ProductController {
 
     private final ProductMapper mapper;
 
+    @GetMapping("list-products")
+    public ResponseEntity<List<ProductDto>> listProducts(@RequestParam Integer pageNumber,
+            @RequestParam Integer pageSize) {
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+
+        return ResponseEntity.ok(productService.findAll(pageable));
+    }
+
+    @GetMapping
+    public ResponseEntity<ProductDto> findProduct(@RequestParam(name = "id") UUID publicId) {
+        if (publicId == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        ProductDto foundProduct = productService.findByPublicId(publicId);
+
+        if (foundProduct == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(foundProduct);
+    }
+
     @PostMapping
-    public ResponseEntity<ProductDto> postMethodName(@RequestBody ProductDto productDto) {
+    public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productDto) {
         Product newProduct = productService.create(productDto);
 
         return ResponseEntity.ok(mapper.toDto(newProduct));
