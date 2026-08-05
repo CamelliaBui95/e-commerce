@@ -41,15 +41,7 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<ProductDto> findProduct(@RequestParam(name = "id") UUID publicId) {
-        if (publicId == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
         ProductDto foundProduct = productService.findByPublicId(publicId);
-
-        if (foundProduct == null) {
-            return ResponseEntity.notFound().build();
-        }
 
         return ResponseEntity.ok(foundProduct);
     }

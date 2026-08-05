@@ -3,6 +3,7 @@ package camellia.ecommerce.inventory_service.services;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,8 @@ public class ProductService {
     }
 
     public ProductDto findByPublicId(UUID publicId) {
-        Product product = productRepository.findByPublicId(publicId);
+        Product product = productRepository.findByPublicId(publicId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found."));
 
         return mapper.toDto(product);
     }
