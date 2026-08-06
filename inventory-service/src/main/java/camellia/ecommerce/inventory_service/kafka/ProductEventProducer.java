@@ -19,11 +19,15 @@ public class ProductEventProducer {
 
     private final ObjectMapper mapper;
 
-    public void publishProductEvent(ProductEvent event, ProductTopic topic) throws JsonProcessingException {
-        String message = mapper.writeValueAsString(event);
+    public void publishProductEvent(ProductEvent event, ProductTopic topic) {
+        String message;
+        try {
+            message = mapper.writeValueAsString(event);
+            kafkaTemplate.send(topic.name(), event.publicId().toString(), message);
+            log.info("Published product event: " + message);
+        } catch (JsonProcessingException e) {
+            throw new IllegalStateException("Could not serialize ProductEvent", e);
+        }
 
-        kafkaTemplate.send(topic.name(), event.publicId().toString(), message);
-
-        log.info("Published product event: " + message);
     }
 }
