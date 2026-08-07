@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderDto {
-    
+
     @JsonProperty("id")
     @JsonInclude(Include.NON_EMPTY)
     private UUID publicId;
@@ -26,4 +26,7 @@ public class OrderDto {
     @JsonProperty("created_at")
     @JsonInclude(Include.NON_EMPTY)
     private ZonedDateTime createdAt;
+
+    private ClientDto client;
+
 }

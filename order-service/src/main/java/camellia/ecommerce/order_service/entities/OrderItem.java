@@ -22,24 +22,24 @@ public class OrderItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    public Long id;
+    private Long id;
 
     @Column(nullable = false)
-    public UUID publicId;
+    private UUID publicId;
 
     @Column(nullable = false)
-    public UUID productId;
+    private UUID productId;
 
     @Column(nullable = false)
-    public String productName;
+    private String productName;
 
     @Column(nullable = false)
-    public Integer quantity = 0;
+    private Integer quantity = 0;
 
     @Column(nullable = false)
-    public Integer unitPrice = 0;
+    private Integer unitPrice = 0;
 
     @ManyToOne
-    public Order order;
+    private Order order;
 
 }
