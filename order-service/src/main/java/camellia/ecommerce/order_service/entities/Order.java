@@ -30,7 +30,7 @@ public class Order {
     private UUID publicId;
 
     @OneToMany
-    private List<OrderItem> orderItems;
+    private List<OrderItem> items;
 
     @Column(nullable = false)
     private ZonedDateTime createdAt;
