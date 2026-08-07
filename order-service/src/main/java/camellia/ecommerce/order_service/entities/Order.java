@@ -1,13 +1,15 @@
-package camellia.ecommerce.inventory_service.entities;
+package camellia.ecommerce.order_service.entities;
 
+import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.UUID;
 
-import camellia.ecommerce.inventory_service.enums.Category;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,28 +19,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "products")
-public class Product {
+@Table(name = "orders")
+public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+    public Long id;
 
     @Column(nullable = false)
     private UUID publicId;
 
-    @Column(nullable = false)
-    private String name;
+    @OneToMany
+    private List<OrderItem> orderItems;
 
     @Column(nullable = false)
-    private Integer numberInStock = 0;
-
-    @Column(nullable = false)
-    private Integer price = 0;
-
-    @Column(nullable = false)
-    private Category category;
-
-    @Column(nullable = true)
-    private String imagePath;
+    private ZonedDateTime createdAt;
 }

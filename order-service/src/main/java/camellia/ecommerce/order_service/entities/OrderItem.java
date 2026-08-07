@@ -1,44 +1,45 @@
-package camellia.ecommerce.inventory_service.entities;
+package camellia.ecommerce.order_service.entities;
 
 import java.util.UUID;
 
-import camellia.ecommerce.inventory_service.enums.Category;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "products")
-public class Product {
+@Table(name = "items")
+public class OrderItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+    public Long id;
 
     @Column(nullable = false)
-    private UUID publicId;
+    public UUID publicId;
 
     @Column(nullable = false)
-    private String name;
+    public UUID productId;
 
     @Column(nullable = false)
-    private Integer numberInStock = 0;
+    public String productName;
 
     @Column(nullable = false)
-    private Integer price = 0;
+    public Integer quantity = 0;
 
     @Column(nullable = false)
-    private Category category;
+    public Integer unitPrice = 0;
 
-    @Column(nullable = true)
-    private String imagePath;
+    @ManyToOne
+    public Order order;
+
 }
