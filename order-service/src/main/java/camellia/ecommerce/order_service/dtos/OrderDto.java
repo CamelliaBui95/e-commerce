@@ -6,6 +6,9 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import camellia.ecommerce.order_service.enums.OrderStatus;
+
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import lombok.AllArgsConstructor;
@@ -26,6 +29,9 @@ public class OrderDto {
     @JsonProperty("created_at")
     @JsonInclude(Include.NON_EMPTY)
     private ZonedDateTime createdAt;
+
+    @JsonInclude(Include.NON_EMPTY)
+    private OrderStatus status;
 
     private ClientDto client;
 

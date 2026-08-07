@@ -4,6 +4,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import camellia.ecommerce.order_service.enums.OrderStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -35,6 +36,12 @@ public class Order {
 
     @Column(nullable = false)
     private ZonedDateTime createdAt;
+
+    @Column(nullable = false)
+    private ZonedDateTime lastUpdatedAt;
+
+    @Column(nullable = false)
+    private OrderStatus status;
 
     @OneToOne
     private Client client;

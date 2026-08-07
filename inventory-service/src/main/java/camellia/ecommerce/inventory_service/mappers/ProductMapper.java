@@ -14,6 +14,7 @@ public interface ProductMapper {
     ProductDto toDto(Product product);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "numberReserved", ignore = true)
     Product toEntity(ProductDto productDto);
 
     List<ProductDto> toDtoList(List<Product> products);

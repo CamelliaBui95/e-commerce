@@ -34,6 +34,9 @@ public class Product {
     private Integer numberInStock = 0;
 
     @Column(nullable = false)
+    private Integer numberReserved = 0;
+
+    @Column(nullable = false)
     private Integer price = 0;
 
     @Column(nullable = false)
