@@ -10,10 +10,11 @@ import camellia.ecommerce.order_service.entities.OrderItem;
 
 @Mapper(componentModel = "spring")
 public interface OrderItemMapper {
-    
+
     OrderItemDto toDTO(OrderItem item);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "order", ignore = true)
     OrderItem toEntity(OrderItemDto itemDto);
 
     List<OrderItemDto> toDtoList(List<OrderItem> items);

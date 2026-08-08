@@ -31,9 +31,6 @@ public class OrderItem {
     private UUID productId;
 
     @Column(nullable = false)
-    private String productName;
-
-    @Column(nullable = false)
     private Integer quantity = 0;
 
     @Column(nullable = false)

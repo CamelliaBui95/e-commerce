@@ -8,7 +8,7 @@ import org.mapstruct.Mapping;
 import camellia.ecommerce.order_service.dtos.OrderDto;
 import camellia.ecommerce.order_service.entities.Order;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = { ClientMapper.class, OrderItemMapper.class })
 public interface OrderMapper {
 
     @Mapping(target = "items", ignore = true)
@@ -16,8 +16,6 @@ public interface OrderMapper {
     @Mapping(target = "client", ignore = true)
     Order toEntity(OrderDto orderDto);
 
-    @Mapping(target = "items", ignore = true)
-    @Mapping(target = "client", ignore = true)
     OrderDto toDto(Order order);
 
     List<OrderDto> toDtoList(List<Order> orders);

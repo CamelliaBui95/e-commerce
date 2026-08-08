@@ -5,6 +5,8 @@ import java.util.UUID;
 import camellia.ecommerce.inventory_service.enums.Category;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -33,13 +35,13 @@ public class Product {
     @Column(nullable = false)
     private Integer numberInStock = 0;
 
-    @Column(nullable = false)
     private Integer numberReserved = 0;
 
     @Column(nullable = false)
     private Integer price = 0;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Category category;
 
     @Column(nullable = true)
