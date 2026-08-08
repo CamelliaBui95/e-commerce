@@ -42,7 +42,7 @@ public class Order {
     @Column(nullable = false)
     private ZonedDateTime lastUpdatedAt;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "varchar(50)")
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 

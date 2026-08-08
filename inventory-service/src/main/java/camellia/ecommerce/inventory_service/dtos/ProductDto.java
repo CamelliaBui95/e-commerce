@@ -23,7 +23,7 @@ public class ProductDto {
     @JsonProperty("stock")
     private Integer numberInStock;
 
-    private Integer price;
+    private Double price;
 
     private Category category;
 

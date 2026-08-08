@@ -34,7 +34,7 @@ public class OrderItem {
     private Integer quantity = 0;
 
     @Column(nullable = false)
-    private Integer unitPrice = 0;
+    private Double unitPrice = 0.0;
 
     @ManyToOne
     private Order order;

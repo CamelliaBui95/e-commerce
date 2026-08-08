@@ -38,9 +38,9 @@ public class Product {
     private Integer numberReserved = 0;
 
     @Column(nullable = false)
-    private Integer price = 0;
+    private Double price = 0.0;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "varchar(50)")
     @Enumerated(EnumType.STRING)
     private Category category;
 
