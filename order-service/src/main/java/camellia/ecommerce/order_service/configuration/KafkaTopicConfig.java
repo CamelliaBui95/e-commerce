@@ -1,28 +1,23 @@
-package camellia.ecommerce.inventory_service.configuration;
+package camellia.ecommerce.order_service.configuration;
 
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.TopicBuilder;
 
-import camellia.ecommerce.inventory_service.kafka.Topic;
+import camellia.ecommerce.order_service.kafka.Topic;
 
 @Configuration
 public class KafkaTopicConfig {
 
     @Bean
-    public NewTopic productCreatedTopic() {
-        return createTopic(Topic.PRODUCT_CREATED);
+    public NewTopic orderCreatedTopic() {
+        return createTopic(Topic.ORDER_CREATED);
     }
 
     @Bean
-    public NewTopic inventoryReservedTopic() {
-        return createTopic(Topic.INVENTORY_RESERVED);
-    }
-
-    @Bean
-    public NewTopic inventoryRejectedTopic() {
-        return createTopic(Topic.INVENTORY_REJECTED);
+    public NewTopic orderCancelledTopic() {
+        return createTopic(Topic.ORDER_CANCELLED);
     }
 
     private NewTopic createTopic(Topic topic) {
