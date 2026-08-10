@@ -19,7 +19,7 @@ public class ProductEventProducer {
 
     private final ObjectMapper mapper;
 
-    public void publishProductEvent(ProductEvent event, ProductTopic topic) {
+    public void publishProductEvent(ProductEvent event, Topic topic) {
         String message;
         try {
             message = mapper.writeValueAsString(event);

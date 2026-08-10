@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import camellia.ecommerce.inventory_service.dtos.ProductDto;
 import camellia.ecommerce.inventory_service.entities.Product;
 import camellia.ecommerce.inventory_service.kafka.ProductEventProducer;
-import camellia.ecommerce.inventory_service.kafka.ProductTopic;
+import camellia.ecommerce.inventory_service.kafka.Topic;
 import camellia.ecommerce.inventory_service.kafka.events.ProductEvent;
 import camellia.ecommerce.inventory_service.kafka.services.ProductEventService;
 import camellia.ecommerce.inventory_service.mappers.ProductMapper;
@@ -38,7 +38,7 @@ public class ProductService {
         Product savedProduct = productRepository.save(newProduct);
 
         ProductEvent productEvent = productEventService.toProductEvent(savedProduct);
-        productEventProducer.publishProductEvent(productEvent, ProductTopic.PRODUCT_CREATED);
+        productEventProducer.publishProductEvent(productEvent, Topic.PRODUCT_CREATED);
 
         return savedProduct;
     }
