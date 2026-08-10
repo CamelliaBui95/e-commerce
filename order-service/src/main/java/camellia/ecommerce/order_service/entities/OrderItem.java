@@ -36,7 +36,4 @@ public class OrderItem {
     @Column(nullable = false)
     private Double unitPrice = 0.0;
 
-    @ManyToOne
-    private Order order;
-
 }

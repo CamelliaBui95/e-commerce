@@ -7,6 +7,7 @@ import org.mapstruct.Mapping;
 
 import camellia.ecommerce.order_service.dtos.OrderDto;
 import camellia.ecommerce.order_service.entities.Order;
+import camellia.ecommerce.order_service.kafka.events.OrderEvent;
 
 @Mapper(componentModel = "spring", uses = { ClientMapper.class, OrderItemMapper.class })
 public interface OrderMapper {
@@ -19,4 +20,6 @@ public interface OrderMapper {
     OrderDto toDto(Order order);
 
     List<OrderDto> toDtoList(List<Order> orders);
+
+    OrderEvent toEvent(Order order);
 }

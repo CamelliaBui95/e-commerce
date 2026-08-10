@@ -12,7 +12,6 @@ import camellia.ecommerce.inventory_service.entities.Product;
 import camellia.ecommerce.inventory_service.kafka.ProductEventProducer;
 import camellia.ecommerce.inventory_service.kafka.Topic;
 import camellia.ecommerce.inventory_service.kafka.events.ProductEvent;
-import camellia.ecommerce.inventory_service.kafka.services.ProductEventService;
 import camellia.ecommerce.inventory_service.mappers.ProductMapper;
 import camellia.ecommerce.inventory_service.repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,10 +22,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class ProductService {
 
-    private final ProductEventProducer productEventProducer;
-
-    private final ProductEventService productEventService;
-
     private final ProductRepository productRepository;
 
     private final ProductMapper mapper;
@@ -36,9 +31,6 @@ public class ProductService {
         newProduct.setPublicId(UUID.randomUUID());
 
         Product savedProduct = productRepository.save(newProduct);
-
-        ProductEvent productEvent = productEventService.toProductEvent(savedProduct);
-        productEventProducer.publishProductEvent(productEvent, Topic.PRODUCT_CREATED);
 
         return savedProduct;
     }
