@@ -35,15 +35,16 @@ public class ProductController {
             @RequestParam Integer pageSize) {
 
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        List<Product> products = productService.findAll(pageable);
 
-        return ResponseEntity.ok(productService.findAll(pageable));
+        return ResponseEntity.ok(mapper.toDtoList(products));
     }
 
     @GetMapping
     public ResponseEntity<ProductDto> findProduct(@RequestParam(name = "id") UUID publicId) {
-        ProductDto foundProduct = productService.findByPublicId(publicId);
+        Product foundProduct = productService.findByPublicId(publicId);
 
-        return ResponseEntity.ok(foundProduct);
+        return ResponseEntity.ok(mapper.toDto(foundProduct));
     }
 
     @PostMapping

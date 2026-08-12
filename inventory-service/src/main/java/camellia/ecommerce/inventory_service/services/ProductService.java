@@ -9,9 +9,6 @@ import org.springframework.stereotype.Service;
 
 import camellia.ecommerce.inventory_service.dtos.ProductDto;
 import camellia.ecommerce.inventory_service.entities.Product;
-import camellia.ecommerce.inventory_service.kafka.ProductEventProducer;
-import camellia.ecommerce.inventory_service.kafka.Topic;
-import camellia.ecommerce.inventory_service.kafka.events.ProductEvent;
 import camellia.ecommerce.inventory_service.mappers.ProductMapper;
 import camellia.ecommerce.inventory_service.repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,16 +32,19 @@ public class ProductService {
         return savedProduct;
     }
 
-    public ProductDto findByPublicId(UUID publicId) {
+    public Product findByPublicId(UUID publicId) {
         Product product = productRepository.findByPublicId(publicId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found."));
 
-        return mapper.toDto(product);
+        return product;
     }
 
-    public List<ProductDto> findAll(Pageable page) {
-        List<Product> products = productRepository.findAll(page).getContent();
-
-        return mapper.toDtoList(products);
+    public List<Product> findAll(Pageable page) {
+        return productRepository.findAll(page).getContent();
     }
+
+    public void updateNumberReserved(Product product, int numberReserved) {
+        productRepository.updateNumberReserved(product.getId(), numberReserved);
+    }
+
 }
