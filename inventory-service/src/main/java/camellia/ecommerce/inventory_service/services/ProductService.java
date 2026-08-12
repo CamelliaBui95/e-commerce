@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import camellia.ecommerce.inventory_service.dtos.ProductDto;
 import camellia.ecommerce.inventory_service.entities.Product;
@@ -43,6 +44,7 @@ public class ProductService {
         return productRepository.findAll(page).getContent();
     }
 
+    @Transactional
     public void updateNumberReserved(Product product, int numberReserved) {
         productRepository.updateNumberReserved(product.getId(), numberReserved);
     }

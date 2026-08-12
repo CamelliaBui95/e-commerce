@@ -23,9 +23,9 @@ public class InventoryService {
 
     private final ProductService productService;
 
-    private final KafkaTemplate<String, InventoryEvent> kafkaTemplate;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
-    @KafkaListener(topics = "ORDER_CREATED")
+    @KafkaListener(topics = "ORDER_CREATED", containerFactory = "orderEventKafkaListenerContainerFactory")
     public void handleOrderCreatedEvent(OrderEvent orderEvent) {
         List<OrderItemEvent> items = orderEvent.items();
 

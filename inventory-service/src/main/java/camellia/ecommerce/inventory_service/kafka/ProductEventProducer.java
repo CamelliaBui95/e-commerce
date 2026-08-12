@@ -15,19 +15,19 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class ProductEventProducer {
 
-    private final KafkaTemplate<String, String> kafkaTemplate;
+    // private final KafkaTemplate<String, String> kafkaTemplate;
 
-    private final ObjectMapper mapper;
+    // private final ObjectMapper mapper;
 
-    public void publishProductEvent(ProductEvent event, Topic topic) {
-        String message;
-        try {
-            message = mapper.writeValueAsString(event);
-            kafkaTemplate.send(topic.name(), event.publicId().toString(), message);
-            log.info("Published product event: " + message);
-        } catch (JsonProcessingException e) {
-            throw new IllegalStateException("Could not serialize ProductEvent", e);
-        }
+    // public void publishProductEvent(ProductEvent event, Topic topic) {
+    // String message;
+    // try {
+    // message = mapper.writeValueAsString(event);
+    // kafkaTemplate.send(topic.name(), event.publicId().toString(), message);
+    // log.info("Published product event: " + message);
+    // } catch (JsonProcessingException e) {
+    // throw new IllegalStateException("Could not serialize ProductEvent", e);
+    // }
 
-    }
+    // }
 }
