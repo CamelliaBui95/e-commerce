@@ -59,7 +59,16 @@ public class OrderService {
 
     @KafkaListener(topics = "INVENTORY_RESERVED", containerFactory = "inventoryEventKafkaListenerContainerFactory")
     public void handleInventoryReservedEvent(InventoryEvent inventoryEvent) {
+        UUID orderId = inventoryEvent.orderId();
 
+        Order order = orderCRUDService.findByPublicId(orderId);
+        order.setStatus(OrderStatus.INVENTORY_RESERVED);
+
+        order.getItems().stream().forEach(item -> {
+            item.setStatus(OrderItemStatus.AVAILABLE);
+        });
+
+        orderCRUDService.save(order);
     }
 
     public void publishOrderCreatedEvent(Order order) {
