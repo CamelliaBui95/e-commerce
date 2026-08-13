@@ -28,7 +28,7 @@ public class ProductService {
         Product newProduct = mapper.toEntity(productDto);
         newProduct.setPublicId(UUID.randomUUID());
 
-        Product savedProduct = productRepository.save(newProduct);
+        Product savedProduct = save(newProduct);
 
         return savedProduct;
     }
@@ -42,6 +42,10 @@ public class ProductService {
 
     public List<Product> findAll(Pageable page) {
         return productRepository.findAll(page).getContent();
+    }
+
+    public Product save(Product product) {
+        return productRepository.save(product);
     }
 
     @Transactional
