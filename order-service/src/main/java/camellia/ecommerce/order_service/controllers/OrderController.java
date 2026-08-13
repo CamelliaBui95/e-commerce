@@ -19,14 +19,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequiredArgsConstructor
 public class OrderController {
 
-    public final OrderService orderService;
+    private final OrderMapper orderMapper;
 
-    public final OrderMapper orderMapper;
+    private final OrderService orderService;
 
     @PostMapping("/create")
     public ResponseEntity<OrderDto> postMethodName(@RequestBody OrderDto newOrderDto) {
 
-        Order newOrder = orderService.create(newOrderDto);
+        Order newOrder = orderService.createOrder(newOrderDto);
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(orderMapper.toDto(newOrder));
     }
