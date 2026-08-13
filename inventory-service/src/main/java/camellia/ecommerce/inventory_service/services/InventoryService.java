@@ -62,13 +62,13 @@ public class InventoryService {
 
     public void publishInventoryReservedEvent(UUID orderId, List<OrderItemEvent> availableItems,
             List<OrderItemEvent> unavailableItems) {
-        InventoryEvent inventoryEvent = new InventoryEvent(availableItems, unavailableItems);
+        InventoryEvent inventoryEvent = new InventoryEvent(orderId, availableItems, unavailableItems);
         publishInventoryEvent(orderId, inventoryEvent, Topic.INVENTORY_RESERVED);
     }
 
     public void publishInventoryRejectedEvent(UUID orderId, List<OrderItemEvent> availableItems,
             List<OrderItemEvent> unavailableItems) {
-        InventoryEvent inventoryEvent = new InventoryEvent(availableItems, unavailableItems);
+        InventoryEvent inventoryEvent = new InventoryEvent(orderId, availableItems, unavailableItems);
         publishInventoryEvent(orderId, inventoryEvent, Topic.INVENTORY_REJECTED);
     }
 
