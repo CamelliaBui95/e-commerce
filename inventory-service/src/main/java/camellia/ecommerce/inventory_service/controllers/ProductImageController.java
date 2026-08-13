@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 import camellia.ecommerce.inventory_service.dtos.ProductImageMetadata;
 import camellia.ecommerce.inventory_service.entities.Product;
 import camellia.ecommerce.inventory_service.services.ProductService;
-import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -40,7 +39,8 @@ public class ProductImageController {
     private final ProductService productService;
 
     @PostMapping(name = "upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> uploadProductImage(@RequestPart ProductImageMetadata metadata,
+    public ResponseEntity<Void> uploadProductImage(
+            @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProductImageMetadata.class))) @RequestPart ProductImageMetadata metadata,
             @RequestPart MultipartFile image) {
         Path imagesDir = Paths.get(productImagesDir).toAbsolutePath().normalize();
         Path imagePath = imagesDir.resolve(metadata.imageName()).normalize();
