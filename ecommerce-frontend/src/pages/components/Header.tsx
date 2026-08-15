@@ -10,7 +10,7 @@ import { Link } from "react-router";
 
 const Header = () => {
   return (
-    <div className="header sticky top-0 z-50 bg-background p-4 flex flex-row items-center w-full">
+    <div className="header sticky top-0 z-50 bg-background p-2 flex flex-row items-center w-full">
       <div className="logo text-xl font-bold text-pink-800">My E-commerce</div>
 
       <NavigationMenu className="ml-auto">
