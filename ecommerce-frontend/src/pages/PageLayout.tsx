@@ -4,12 +4,12 @@ import { Outlet } from "react-router";
 
 const PageLayout = () => {
   return (
-    <React.Fragment>
+    <div className="relative">
       <Header />
       <main>
         <Outlet />
       </main>
-    </React.Fragment>
+    </div>
   );
 };
 

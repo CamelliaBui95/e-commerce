@@ -23,6 +23,8 @@ const HomePage = () => {
           alt="hero-products"
         />
       </section>
+
+      <section className="h-full">TEST</section>
     </div>
   );
 };
