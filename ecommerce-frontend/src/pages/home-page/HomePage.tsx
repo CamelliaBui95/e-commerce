@@ -1,7 +1,7 @@
-import React from "react";
+import React, { type JSX } from "react";
 import "./homePage.scss";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, RotateCcw, ShieldCheck, Truck } from "lucide-react";
 
 const HomePage = () => {
   return (
@@ -23,6 +23,24 @@ const HomePage = () => {
             Shop now
             <ArrowRight />
           </Button>
+
+          <div className="service-highlights flex flex-row gap-2 items-center">
+            <ServiceHighlight
+              icon={<Truck size={25} strokeWidth={1} />}
+              title="Free Shipping"
+              description="On orders over 50$"
+            />
+            <ServiceHighlight
+              icon={<ShieldCheck size={25} strokeWidth={1} />}
+              title="Secure Payment"
+              description="100% protected"
+            />
+            <ServiceHighlight
+              icon={<RotateCcw size={25} strokeWidth={1} />}
+              title="Easy Returns"
+              description="30-day return policy"
+            />
+          </div>
         </div>
 
         <img
@@ -38,3 +56,25 @@ const HomePage = () => {
 };
 
 export default HomePage;
+
+interface ServiceHighlightProps {
+  icon: JSX.Element;
+  title: string;
+  description: string;
+}
+
+export const ServiceHighlight: React.FC<ServiceHighlightProps> = ({
+  icon,
+  title,
+  description,
+}) => {
+  return (
+    <div className="service-highlight flex flex-row items-center justify-center gap-2">
+      <div>{icon}</div>
+      <div className="text-[0.8rem]">
+        <p className="font-bold">{title}</p>
+        <p>{description}</p>
+      </div>
+    </div>
+  );
+};

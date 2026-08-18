@@ -8,6 +8,24 @@
         flex-direction: column;
         gap: 0.8rem;
     }
+
+    .service-highlights {
+        margin-top: 1rem;
+
+        .service-highlight {
+            padding: 0 1rem;
+        }
+
+        .service-highlight:not(:last-child) {
+            border-right: 1px solid var(--muted-taupe);
+        }
+
+
+        .service-highlight:first-child {
+            padding-left: 0;
+        }
+
+    }
 }
 
 
