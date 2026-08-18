@@ -1,5 +1,7 @@
 import React from "react";
 import "./homePage.scss";
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
 
 const HomePage = () => {
   return (
@@ -17,10 +19,14 @@ const HomePage = () => {
           <p className="text-xl text-dark-brown">
             Curated fashion, home essentials, and more - all in one place.
           </p>
+          <Button size="lg" className="w-40">
+            Shop now
+            <ArrowRight />
+          </Button>
         </div>
 
         <img
-          className="h-145 self-end translate-x-15 translate-y-20"
+          className="h-140 self-end translate-x-15 translate-y-15"
           src="/images/hero-products.png"
           alt="hero-products"
         />

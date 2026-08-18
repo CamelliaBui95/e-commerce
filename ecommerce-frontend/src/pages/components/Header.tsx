@@ -7,6 +7,12 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
+import {
+  ShoppingBag,
+  ShoppingCartIcon,
+  User2Icon,
+  UserIcon,
+} from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router";
 
@@ -53,29 +59,67 @@ const Header = () => {
       <div
         ref={headerRef}
         className={cn(
-          "header top-0 p-2 z-50 flex flex-row items-center w-full transition-colors",
+          "header top-0 py-4 px-6 z-50 flex flex-row items-center w-full transition-colors",
           getHeaderStyle()
         )}
       >
-        <div className="logo text-xl font-bold text-pink-800">
-          My E-commerce
+        <div
+          id="logo"
+          className="text-xl text-charcoal font-bold flex flex-row gap-2 justify-center items-center"
+        >
+          <ShoppingBag width={20} />
+          <span>Shopora</span>
         </div>
 
         <NavigationMenu className="ml-auto">
           <NavigationMenuList>
             <NavigationMenuItem>
               <NavigationMenuLink render={<Link to="/" />}>
-                Home
+                Shop
               </NavigationMenuLink>
             </NavigationMenuItem>
 
             <NavigationMenuItem>
-              <NavigationMenuTrigger>Products</NavigationMenuTrigger>
+              <NavigationMenuTrigger>Categories</NavigationMenuTrigger>
               <NavigationMenuContent>
                 <NavigationMenuLink render={<Link to="/products" />}>
                   Link
                 </NavigationMenuLink>
               </NavigationMenuContent>
+            </NavigationMenuItem>
+
+            <NavigationMenuItem>
+              <NavigationMenuLink render={<Link to="/" />}>
+                New Arrivals
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+
+            <NavigationMenuItem>
+              <NavigationMenuLink render={<Link to="/" />}>
+                Best Sellers
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+
+            <NavigationMenuItem>
+              <NavigationMenuLink render={<Link to="/" />}>
+                About Us
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
+
+        <NavigationMenu className="ml-auto">
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <NavigationMenuLink render={<Link to="/" />}>
+                <User2Icon className="size-5" />
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+
+            <NavigationMenuItem>
+              <NavigationMenuLink render={<Link to="/" />}>
+                <ShoppingCartIcon className="size-5" />
+              </NavigationMenuLink>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>

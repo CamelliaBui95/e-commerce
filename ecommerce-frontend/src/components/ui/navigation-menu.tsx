@@ -34,7 +34,7 @@ function NavigationMenuList({
     <NavigationMenuPrimitive.List
       data-slot="navigation-menu-list"
       className={cn(
-        "group flex flex-1 list-none items-center justify-center gap-0",
+        "group flex flex-1 list-none items-center justify-center gap-2",
         className
       )}
       {...props}
@@ -56,7 +56,7 @@ function NavigationMenuItem({
 }
 
 const navigationMenuTriggerStyle = cva(
-  "group/navigation-menu-trigger inline-flex h-9 w-max items-center justify-center rounded-lg px-2.5 py-1.5 text-sm font-medium transition-all outline-none hover:text-pink-800 focus:text-pink-800 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-1 cursor-pointer disabled:pointer-events-none disabled:opacity-50 data-popup-open:text-pink-800 data-open:text-pink-800"
+  "group/navigation-menu-trigger inline-flex h-9 w-max items-center justify-center rounded-lg px-2.5 py-1.5 text-sm font-medium transition-all outline-none hover:text-primary/80 focus:text-primary/80 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-1 cursor-pointer disabled:pointer-events-none disabled:opacity-50 data-popup-open:text-primary/80 data-open:text-primary/80"
 );
 
 function NavigationMenuTrigger({
@@ -132,7 +132,7 @@ function NavigationMenuLink({
     <NavigationMenuPrimitive.Link
       data-slot="navigation-menu-link"
       className={cn(
-        "flex items-center gap-2 rounded-lg p-2 text-sm transition-all outline-none hover:text-pink-800 focus:text-pink-800 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-1 in-data-[slot=navigation-menu-content]:rounded-md data-active:text-pink-800 [&_svg:not([class*='size-'])]:size-4",
+        "flex items-center gap-2 rounded-lg p-2 text-md transition-all outline-none hover:text-primary/80 focus:text-primary/80 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-1 in-data-[slot=navigation-menu-content]:rounded-md data-active:text-primary/80 [&_svg:not([class*='size-'])]:size-4",
         className
       )}
       {...props}
