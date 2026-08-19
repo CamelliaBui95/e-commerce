@@ -3,6 +3,7 @@ import "./homePage.scss";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, RotateCcw, ShieldCheck, Truck } from "lucide-react";
 import ServiceHighlight from "../components/service-highlight/ServiceHighlight";
+import ProductCard from "../components/ProductCard";
 
 const serviceHighlights = [
   {
@@ -61,7 +62,11 @@ const HomePage = () => {
         />
       </section>
 
-      <section className="h-full">TEST</section>
+      <section className="h-full flex flex-row items-start gap-1">
+        <ProductCard name="Product 1" price={20.99} currency="euro" />
+        <ProductCard name="Product 2" price={20.99} currency="euro" />
+        <ProductCard name="Product 3" price={20.99} currency="euro" />
+      </section>
     </div>
   );
 };
