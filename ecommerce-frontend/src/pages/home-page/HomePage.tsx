@@ -33,7 +33,7 @@ const HomePage = () => {
               New Season
             </span>
           </p>
-          <h1 className="text-6xl font-bold text-charcoal">
+          <h1 className="text-6xl font-bold text-charcoal font-accent">
             Discover products that elevate your everyday
           </h1>
           <p className="text-xl text-dark-brown">
@@ -62,10 +62,24 @@ const HomePage = () => {
         />
       </section>
 
-      <section className="h-full flex flex-row items-start gap-1">
-        <ProductCard name="Product 1" price={20.99} currency="euro" />
-        <ProductCard name="Product 2" price={20.99} currency="euro" />
-        <ProductCard name="Product 3" price={20.99} currency="euro" />
+      <section className="">
+        <div className="w-fit my-6 mx-auto">
+          <h2
+            id="new-arrivals"
+            className="text-xl text-charcoal text-center font-bold"
+          >
+            New Arrivals
+          </h2>
+          <div className="w-1/2 mx-auto mt-2 border-t-4 border-charcoal" />
+        </div>
+
+        <div className="flex flex-row items-center justify-evenly">
+          <ProductCard name="Product 1" price={20.99} currency="euro" />
+          <ProductCard name="Product 2" price={20.99} currency="euro" />
+          <ProductCard name="Product 3" price={20.99} currency="euro" />
+          <ProductCard name="Product 4" price={20.99} currency="euro" />
+          <ProductCard name="Product 5" price={20.99} currency="euro" />
+        </div>
       </section>
     </div>
   );
