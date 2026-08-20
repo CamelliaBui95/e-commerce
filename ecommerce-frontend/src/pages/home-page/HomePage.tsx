@@ -3,8 +3,8 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, RotateCcw, ShieldCheck, Truck } from "lucide-react";
 import ServiceHighlight from "../components/service-highlight/ServiceHighlight";
 import ProductCard from "../components/ProductCard";
-import { useEffect } from "react";
 import productService from "@/services/productService";
+import { useQuery } from "@tanstack/react-query";
 
 const serviceHighlights = [
   {
@@ -25,9 +25,11 @@ const serviceHighlights = [
 ];
 
 const HomePage = () => {
-  useEffect(() => {
-    productService.getProducts(0, 10).then((data) => console.log(data));
-  }, []);
+  const { data } = useQuery({
+    queryKey: ["products"],
+    queryFn: () => productService.getProducts(0, 10),
+  });
+
   return (
     <div className="h-screen">
       <section className="hero-section bg-soft-ivory w-screen h-3/4 flex flex-row items-center justify-between overflow-hidden">
@@ -78,11 +80,13 @@ const HomePage = () => {
         </div>
 
         <div className="flex flex-row items-center justify-evenly">
-          <ProductCard name="Product 1" price={20.99} currency="euro" />
-          <ProductCard name="Product 2" price={20.99} currency="euro" />
-          <ProductCard name="Product 3" price={20.99} currency="euro" />
-          <ProductCard name="Product 4" price={20.99} currency="euro" />
-          <ProductCard name="Product 5" price={20.99} currency="euro" />
+          {data?.map((product) => (
+            <ProductCard
+              name={product.name}
+              price={product.price}
+              currency="euro"
+            />
+          ))}
         </div>
       </section>
     </div>
