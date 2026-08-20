@@ -1,4 +1,3 @@
-import React, { type JSX } from "react";
 import "./homePage.scss";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, RotateCcw, ShieldCheck, Truck } from "lucide-react";
