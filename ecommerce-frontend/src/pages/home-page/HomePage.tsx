@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, RotateCcw, ShieldCheck, Truck } from "lucide-react";
 import ServiceHighlight from "../components/service-highlight/ServiceHighlight";
 import ProductCard from "../components/ProductCard";
+import { useEffect } from "react";
+import productService from "@/services/productService";
 
 const serviceHighlights = [
   {
@@ -23,6 +25,9 @@ const serviceHighlights = [
 ];
 
 const HomePage = () => {
+  useEffect(() => {
+    productService.getProducts(0, 10).then((data) => console.log(data));
+  }, []);
   return (
     <div className="h-screen">
       <section className="hero-section bg-soft-ivory w-screen h-3/4 flex flex-row items-center justify-between overflow-hidden">
