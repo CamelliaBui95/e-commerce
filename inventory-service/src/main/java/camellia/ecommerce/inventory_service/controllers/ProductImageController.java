@@ -20,12 +20,19 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.Duration;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.MediaTypeFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -43,20 +50,38 @@ public class ProductImageController {
             @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProductImageMetadata.class))) @RequestPart ProductImageMetadata metadata,
             @RequestPart MultipartFile image) {
         Path imagesDir = Paths.get(productImagesDir).toAbsolutePath().normalize();
-        Path imagePath = imagesDir.resolve(metadata.imageName()).normalize();
 
-        Product product = productService.findByPublicId(metadata.productId());
-        product.setImagePath(imagePath.toString());
-
-        productService.save(product);
+        String imageName = metadata.imageName() != null ? metadata.imageName() : image.getOriginalFilename();
+        Path imagePath = imagesDir.resolve(imageName).normalize();
 
         try {
             Files.copy(image.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
+
+            Product product = productService.findByPublicId(metadata.productId());
+            product.setImagePath(imageName);
+
+            productService.save(product);
             return ResponseEntity.ok().build();
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
 
+    }
+
+    @GetMapping
+    public ResponseEntity<Resource> getProductImage(@RequestParam String imageName) {
+        Path imagesDir = Paths.get(productImagesDir).toAbsolutePath().normalize();
+        Path resolved = imagesDir.resolve(imageName).normalize();
+
+        if (!Files.isRegularFile(resolved)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Resource image = new FileSystemResource(resolved);
+        MediaType contentType = MediaTypeFactory.getMediaType(image).orElse(MediaType.APPLICATION_OCTET_STREAM);
+
+        return ResponseEntity.ok().contentType(contentType)
+                .cacheControl(CacheControl.maxAge(Duration.ofDays(30)).cachePublic()).body(image);
     }
 
 }
