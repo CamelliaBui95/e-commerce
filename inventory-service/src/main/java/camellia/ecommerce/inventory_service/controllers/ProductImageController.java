@@ -58,7 +58,7 @@ public class ProductImageController {
             Files.copy(image.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
 
             Product product = productService.findByPublicId(metadata.productId());
-            product.setImagePath(imageName);
+            product.setImageName(imageName);
 
             productService.save(product);
             return ResponseEntity.ok().build();

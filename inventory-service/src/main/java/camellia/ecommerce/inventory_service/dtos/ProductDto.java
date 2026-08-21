@@ -32,9 +32,9 @@ public class ProductDto {
 
     private Category category;
 
-    @JsonProperty("image_path")
+    @JsonProperty("image_name")
     @JsonInclude(Include.NON_EMPTY)
-    private String imagePath;
+    private String imageName;
 
     @JsonProperty("created_at")
     @JsonInclude(Include.NON_EMPTY)

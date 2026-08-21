@@ -46,7 +46,7 @@ public class Product {
     private Category category;
 
     @Column(nullable = true)
-    private String imagePath;
+    private String imageName;
 
     @Column(nullable = false)
     private ZonedDateTime createdAt;

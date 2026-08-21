@@ -8,6 +8,6 @@ export type Product = {
   number_reserved: number;
   price: number;
   category: Category;
-  image_path?: string;
+  image_name: string;
   created_at: Date;
 };
