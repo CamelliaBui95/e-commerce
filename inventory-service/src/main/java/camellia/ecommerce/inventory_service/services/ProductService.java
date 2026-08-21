@@ -5,11 +5,14 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.kafka.common.errors.ResourceNotFoundException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import camellia.ecommerce.inventory_service.dtos.ProductDto;
+import camellia.ecommerce.inventory_service.dtos.ProductSearchQuery;
 import camellia.ecommerce.inventory_service.entities.Product;
 import camellia.ecommerce.inventory_service.mappers.ProductMapper;
 import camellia.ecommerce.inventory_service.repositories.ProductRepository;
@@ -33,6 +36,12 @@ public class ProductService {
         Product savedProduct = save(newProduct);
 
         return savedProduct;
+    }
+
+    public Page<Product> search(ProductSearchQuery query) {
+        Specification<Product> spec = ProductSpecifications.fromQuery(query);
+        Pageable pageable = ProductSpecifications.createPageable(query);
+        return productRepository.findAll(spec, pageable);
     }
 
     public Product findByPublicId(UUID publicId) {
