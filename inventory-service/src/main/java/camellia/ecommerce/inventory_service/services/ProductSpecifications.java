@@ -23,17 +23,22 @@ public final class ProductSpecifications {
 
         List<Specification<Product>> specs = new ArrayList<>();
 
-        String productName = query.getName().orElse(null);
+        String productName = query.getName();
         if (productName != null && !productName.isBlank()) {
             specs.add(containsName(productName));
         }
 
-        Category category = query.getCategory().orElse(null);
+        Category category = query.getCategory();
         if (category != null) {
             specs.add(hasCategory(category));
         }
 
-        return specs.stream().filter(Objects::nonNull).reduce(Specification::and).orElseThrow();
+        return specs.isEmpty() ? emptySpec()
+                : specs.stream().filter(Objects::nonNull).reduce(Specification::and).orElseThrow();
+    }
+
+    private static Specification<Product> emptySpec() {
+        return (root, query, cb) -> cb.conjunction();
     }
 
     private static Specification<Product> hasCategory(Category category) {
@@ -47,11 +52,11 @@ public final class ProductSpecifications {
 
     public static Pageable createPageable(ProductSearchQuery query) {
 
-        int pageNumber = query.getPageNumber().isPresent() ? query.getPageNumber().get() : 0;
-        int pageSize = query.getPageSize().isPresent() ? query.getPageSize().get() : 10;
-        SortDirection direction = query.getDirection().isPresent() ? query.getDirection().get() : SortDirection.DESC;
+        int pageNumber = query.getPageNumber() != null ? query.getPageNumber() : 0;
+        int pageSize = query.getPageSize() != null ? query.getPageSize() : 10;
+        SortDirection direction = query.getDirection() != null ? query.getDirection() : SortDirection.DESC;
 
-        ProductSortBy sortBy = query.getSortBy().isPresent() ? query.getSortBy().get() : ProductSortBy.CREATED_AT;
+        ProductSortBy sortBy = query.getSortBy() != null ? query.getSortBy() : ProductSortBy.CREATED_AT;
 
         Sort sort = direction == SortDirection.ASC ? Sort.by(sortBy.toString()).ascending()
                 : Sort.by(sortBy.toString()).descending();
