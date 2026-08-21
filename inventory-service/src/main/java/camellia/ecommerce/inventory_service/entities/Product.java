@@ -1,5 +1,6 @@
 package camellia.ecommerce.inventory_service.entities;
 
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 import camellia.ecommerce.inventory_service.enums.Category;
@@ -46,4 +47,7 @@ public class Product {
 
     @Column(nullable = true)
     private String imagePath;
+
+    @Column(nullable = false)
+    private ZonedDateTime createdAt;
 }

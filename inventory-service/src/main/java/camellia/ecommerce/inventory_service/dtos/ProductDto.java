@@ -1,5 +1,6 @@
 package camellia.ecommerce.inventory_service.dtos;
 
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -34,5 +35,9 @@ public class ProductDto {
     @JsonProperty("image_path")
     @JsonInclude(Include.NON_EMPTY)
     private String imagePath;
+
+    @JsonProperty("created_at")
+    @JsonInclude(Include.NON_EMPTY)
+    private ZonedDateTime createdAt;
 
 }

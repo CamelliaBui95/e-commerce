@@ -9,4 +9,5 @@ export type Product = {
   price: number;
   category: Category;
   image_path?: string;
+  created_at: Date;
 };

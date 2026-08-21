@@ -1,5 +1,6 @@
 package camellia.ecommerce.inventory_service.services;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,6 +28,7 @@ public class ProductService {
     public Product create(ProductDto productDto) {
         Product newProduct = mapper.toEntity(productDto);
         newProduct.setPublicId(UUID.randomUUID());
+        newProduct.setCreatedAt(ZonedDateTime.now());
 
         Product savedProduct = save(newProduct);
 
