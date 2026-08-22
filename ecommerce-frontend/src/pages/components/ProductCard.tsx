@@ -1,12 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import productService from "@/services/productService";
 import { ShoppingCartIcon } from "lucide-react";
 import React from "react";
+
+const PLACEHOLDER_IMAGE = "https://avatar.vercel.sh/shadcn1";
 
 interface ProductCardProps {
   name: string;
   price: number;
   currency: "euro" | "dollar";
+  imageName?: string;
 }
 
 const currencySymbols: Record<string, string> = {
@@ -18,12 +22,16 @@ const ProductCard: React.FC<ProductCardProps> = ({
   name,
   price,
   currency = "euro",
+  imageName,
 }) => {
+  const imageUrl = productService.getProductImageUrl(imageName);
+
   return (
     <Card className="relative w-[250px] pt-0">
       <img
-        src="https://avatar.vercel.sh/shadcn1"
-        alt="Event cover"
+        src={imageUrl ?? PLACEHOLDER_IMAGE}
+        alt={name}
+        loading="lazy"
         className="relative z-20 aspect-video w-full object-cover brightness-60 grayscale dark:brightness-40"
       />
       <CardHeader>

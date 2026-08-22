@@ -5,6 +5,8 @@ import ServiceHighlight from "../components/service-highlight/ServiceHighlight";
 import ProductCard from "../components/ProductCard";
 import productService from "@/services/productService";
 import { useQuery } from "@tanstack/react-query";
+import { useSearchProducts } from "@/hooks/useProducts";
+import { SortDirection } from "@/enums/sortDirection";
 
 const serviceHighlights = [
   {
@@ -25,9 +27,10 @@ const serviceHighlights = [
 ];
 
 const HomePage = () => {
-  const { data } = useQuery({
-    queryKey: ["products"],
-    queryFn: () => productService.getProducts(0, 10),
+  const { data } = useSearchProducts({
+    pageNumber: 0,
+    pageSize: 5,
+    direction: SortDirection.DESC,
   });
 
   return (
@@ -80,11 +83,12 @@ const HomePage = () => {
         </div>
 
         <div className="flex flex-row items-center justify-evenly">
-          {data?.map((product) => (
+          {data?.content.map((product) => (
             <ProductCard
               name={product.name}
               price={product.price}
               currency="euro"
+              imageName={product.image_name}
             />
           ))}
         </div>

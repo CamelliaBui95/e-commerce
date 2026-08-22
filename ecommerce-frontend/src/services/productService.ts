@@ -1,16 +1,26 @@
 import { inventoryApi } from "@/api/api";
-import type { Product } from "@/models/product";
+import type { Page } from "@/models/page";
+import type { Product, ProductSearchQuery } from "@/models/product";
 
-const getProducts = async (
-  pageNumber: number,
-  pageSize: number
-): Promise<Product[]> => {
-  const response = await inventoryApi.get<Product[]>(
-    `/products/list-products?pageNumber=${pageNumber}&pageSize=${pageSize}`
-  );
+const searchProducts = async (
+  query: Partial<ProductSearchQuery>
+): Promise<Page<Product>> => {
+  const response = await inventoryApi.get<Page<Product>>("/products/search", {
+    params: query,
+  });
+
   return response.data;
 };
 
+const getProductImageUrl = (imageName?: string): string | undefined => {
+  if (!imageName) return undefined;
+
+  const baseUrl = inventoryApi.defaults.baseURL ?? "";
+
+  return `${baseUrl}/product-image?imageName=${encodeURIComponent(imageName)}`;
+};
+
 export default {
-  getProducts,
+  searchProducts,
+  getProductImageUrl,
 };
