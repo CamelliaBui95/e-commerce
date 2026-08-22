@@ -32,7 +32,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         src={imageUrl ?? PLACEHOLDER_IMAGE}
         alt={name}
         loading="lazy"
-        className="relative z-20 aspect-video w-full object-cover brightness-60 grayscale dark:brightness-40"
+        className="relative z-20 aspect-video w-full object-cover"
       />
       <CardHeader>
         {/* <CardAction>
