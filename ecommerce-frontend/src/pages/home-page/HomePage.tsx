@@ -80,7 +80,7 @@ const HomePage = () => {
           <div className="w-1/2 mx-auto mt-2 border-t-4 border-charcoal" />
         </div>
 
-        <div className="flex flex-row items-center justify-evenly">
+        <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-4">
           {data?.content.map((product) => (
             <ProductCard
               name={product.name}

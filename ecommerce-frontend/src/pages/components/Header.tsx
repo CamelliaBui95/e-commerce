@@ -47,7 +47,7 @@ const Header = () => {
 
   const getHeaderStyle = () => {
     if (pathname !== "/" || isPastHero) {
-      return "fixed top-0 left-0 bg-full shadow-sm";
+      return "fixed top-0 left-0 bg-white shadow-sm";
     } else {
       return "absolute";
     }

@@ -27,12 +27,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const imageUrl = productService.getProductImageUrl(imageName);
 
   return (
-    <Card className="relative w-[250px] pt-0">
+    <Card className="relative w-full pt-0">
       <img
         src={imageUrl ?? PLACEHOLDER_IMAGE}
         alt={name}
         loading="lazy"
-        className="relative z-20 aspect-video w-full object-cover"
+        className="relative z-20 aspect-3/4 w-full object-cover"
       />
       <CardHeader>
         {/* <CardAction>

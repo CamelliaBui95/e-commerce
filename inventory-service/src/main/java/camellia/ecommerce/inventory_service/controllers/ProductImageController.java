@@ -73,7 +73,7 @@ public class ProductImageController {
         Path imagesDir = Paths.get(productImagesDir).toAbsolutePath().normalize();
         Path resolved = imagesDir.resolve(imageName).normalize();
 
-        if (!Files.isRegularFile(resolved)) {
+        if (!resolved.startsWith(imagesDir) || !Files.isRegularFile(resolved)) {
             return ResponseEntity.notFound().build();
         }
 
