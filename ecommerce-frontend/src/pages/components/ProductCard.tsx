@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { ImageSize } from "@/enums/ImageSize";
 import productService from "@/services/productService";
 import { ShoppingCartIcon } from "lucide-react";
 import React from "react";
@@ -24,7 +25,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
   currency = "euro",
   imageName,
 }) => {
-  const imageUrl = productService.getProductImageUrl(imageName);
+  const imageUrl = productService.getProductImageUrl(
+    imageName,
+    ImageSize.MEDIUM
+  );
 
   return (
     <Card className="relative w-full pt-0">

@@ -5,6 +5,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import camellia.ecommerce.inventory_service.dtos.ProductImageMetadata;
 import camellia.ecommerce.inventory_service.entities.Product;
+import camellia.ecommerce.inventory_service.enums.ImageSize;
+import camellia.ecommerce.inventory_service.services.ProductImageService;
 import camellia.ecommerce.inventory_service.services.ProductService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,8 +22,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.time.Duration;
 
+import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -44,6 +46,8 @@ public class ProductImageController {
     private String productImagesDir;
 
     private final ProductService productService;
+
+    private final ProductImageService productImageService;
 
     @PostMapping(name = "upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> uploadProductImage(
@@ -69,19 +73,23 @@ public class ProductImageController {
     }
 
     @GetMapping
-    public ResponseEntity<Resource> getProductImage(@RequestParam String imageName) {
-        Path imagesDir = Paths.get(productImagesDir).toAbsolutePath().normalize();
-        Path resolved = imagesDir.resolve(imageName).normalize();
+    public ResponseEntity<Resource> getProductImage(@RequestParam String imageName,
+            @RequestParam(defaultValue = "small") ImageSize size) {
 
-        if (!resolved.startsWith(imagesDir) || !Files.isRegularFile(resolved)) {
+        try {
+            Path resolved = productImageService.getImage(imageName, size);
+            Resource image = new FileSystemResource(resolved);
+            MediaType contentType = MediaTypeFactory.getMediaType(image).orElse(MediaType.APPLICATION_OCTET_STREAM);
+
+            return ResponseEntity.ok().contentType(contentType).cacheControl(CacheControl.noCache()).body(image);
+        } catch (ResourceNotFoundException e) {
+            log.error(e.getMessage());
             return ResponseEntity.notFound().build();
+        } catch (IOException e) {
+            log.error(e.getMessage());
+            return ResponseEntity.internalServerError().build();
         }
 
-        Resource image = new FileSystemResource(resolved);
-        MediaType contentType = MediaTypeFactory.getMediaType(image).orElse(MediaType.APPLICATION_OCTET_STREAM);
-
-        return ResponseEntity.ok().contentType(contentType)
-                .cacheControl(CacheControl.maxAge(Duration.ofDays(30)).cachePublic()).body(image);
     }
 
 }

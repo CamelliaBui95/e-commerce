@@ -80,9 +80,10 @@ const HomePage = () => {
           <div className="w-1/2 mx-auto mt-2 border-t-4 border-charcoal" />
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-4">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {data?.content.map((product) => (
             <ProductCard
+              key={product.id}
               name={product.name}
               price={product.price}
               currency="euro"
