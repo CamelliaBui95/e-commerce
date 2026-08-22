@@ -3,8 +3,6 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, RotateCcw, ShieldCheck, Truck } from "lucide-react";
 import ServiceHighlight from "../components/service-highlight/ServiceHighlight";
 import ProductCard from "../components/ProductCard";
-import productService from "@/services/productService";
-import { useQuery } from "@tanstack/react-query";
 import { useSearchProducts } from "@/hooks/useProducts";
 import { SortDirection } from "@/enums/sortDirection";
 
