@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ImageSize } from "@/enums/ImageSize";
+import type { Product } from "@/models/product";
 import productService from "@/services/productService";
 import { ShoppingCartIcon } from "lucide-react";
 import React from "react";
@@ -8,10 +9,9 @@ import React from "react";
 const PLACEHOLDER_IMAGE = "https://avatar.vercel.sh/shadcn1";
 
 interface ProductCardProps {
-  name: string;
-  price: number;
   currency: "euro" | "dollar";
-  imageName?: string;
+  product: Product;
+  onAddToCart: (product: Product) => void;
 }
 
 const currencySymbols: Record<string, string> = {
@@ -20,13 +20,12 @@ const currencySymbols: Record<string, string> = {
 };
 
 const ProductCard: React.FC<ProductCardProps> = ({
-  name,
-  price,
   currency = "euro",
-  imageName,
+  product,
+  onAddToCart,
 }) => {
   const imageUrl = productService.getProductImageUrl(
-    imageName,
+    product?.image_name,
     ImageSize.MEDIUM
   );
 
@@ -34,24 +33,26 @@ const ProductCard: React.FC<ProductCardProps> = ({
     <Card className="relative w-full pt-0">
       <img
         src={imageUrl ?? PLACEHOLDER_IMAGE}
-        alt={name}
+        alt={product.name}
         loading="lazy"
         className="relative z-20 aspect-3/4 w-full object-cover"
       />
       <CardHeader>
-        {/* <CardAction>
-          <Badge variant="secondary">20$</Badge>
-        </CardAction> */}
         <CardTitle className="flex flex-row justify-between">
-          <span>{name}</span>
+          <span>{product.name}</span>
           <span>
-            {price}
+            {product.price}
             {currencySymbols[currency]}
           </span>
         </CardTitle>
       </CardHeader>
       <CardFooter>
-        <Button className="w-full">
+        <Button
+          className="w-full h-8"
+          onClick={(_: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
+            onAddToCart(product)
+          }
+        >
           <ShoppingCartIcon data-icon="inline-start" /> Add to cart
         </Button>
       </CardFooter>

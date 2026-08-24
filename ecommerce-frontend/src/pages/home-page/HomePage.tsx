@@ -5,6 +5,10 @@ import ServiceHighlight from "../components/service-highlight/ServiceHighlight";
 import ProductCard from "../components/ProductCard";
 import { useSearchProducts } from "@/hooks/useProducts";
 import { SortDirection } from "@/enums/sortDirection";
+import { useDispatch } from "react-redux";
+import { addToCart } from "@/features/cart/cartSlice";
+import type { OrderItem } from "@/models/order";
+import type { Product } from "@/models/product";
 
 const serviceHighlights = [
   {
@@ -30,6 +34,18 @@ const HomePage = () => {
     pageSize: 4,
     direction: SortDirection.DESC,
   });
+
+  const dispatch = useDispatch();
+
+  const handleAddToCart = (product: Product) => {
+    const orderItem: OrderItem = {
+      product_id: product.id,
+      quantity: 1,
+      unit_price: product.price,
+    };
+
+    dispatch(addToCart(orderItem));
+  };
 
   return (
     <div className="h-screen">
@@ -84,10 +100,9 @@ const HomePage = () => {
           {data?.content.map((product) => (
             <ProductCard
               key={product.id}
-              name={product.name}
-              price={product.price}
+              product={product}
               currency="euro"
-              imageName={product.image_name}
+              onAddToCart={handleAddToCart}
             />
           ))}
         </div>

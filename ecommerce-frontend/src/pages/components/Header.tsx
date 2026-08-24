@@ -121,7 +121,7 @@ const Header = () => {
               <Button className="bg-transparent text-primary rounded-full p-3 hover:bg-primary/70 hover:text-warm-cream relative">
                 <ShoppingCartIcon className="size-5" />
                 {cartItemCount > 0 && (
-                  <Badge className="bg-red-500 text-[0.7rem] p-[0.4rem] rounded-full absolute translate-x-3 translate-y-2">
+                  <Badge className="bg-red-500 text-[0.7rem] p-[0.4rem] rounded-full absolute translate-x-3 translate-y-3">
                     {cartItemCount}
                   </Badge>
                 )}
