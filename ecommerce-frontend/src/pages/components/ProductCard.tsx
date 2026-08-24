@@ -49,9 +49,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
       <CardFooter>
         <Button
           className="w-full h-8"
-          onClick={(_: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
-            onAddToCart(product)
-          }
+          onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+            e.preventDefault();
+            onAddToCart(product);
+          }}
         >
           <ShoppingCartIcon data-icon="inline-start" /> Add to cart
         </Button>

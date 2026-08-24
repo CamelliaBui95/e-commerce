@@ -40,6 +40,8 @@ const HomePage = () => {
   const handleAddToCart = (product: Product) => {
     const orderItem: OrderItem = {
       product_id: product.id,
+      product_name: product.name,
+      image_name: product.image_name,
       quantity: 1,
       unit_price: product.price,
     };

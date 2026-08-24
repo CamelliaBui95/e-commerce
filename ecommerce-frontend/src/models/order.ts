@@ -6,6 +6,8 @@ import type { Client } from "./client";
 export type OrderItem = {
   id?: UUID;
   product_id: UUID;
+  product_name?: string;
+  image_name?: string;
   quantity: number;
   unit_price: number;
   status?: OrderItemStatus;
