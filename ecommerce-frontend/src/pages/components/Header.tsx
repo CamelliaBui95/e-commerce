@@ -1,3 +1,5 @@
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -6,14 +8,11 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
+import { cartItemsCountSelector } from "@/features/cart/cartSelector";
 import { cn } from "@/lib/utils";
-import {
-  ShoppingBag,
-  ShoppingCartIcon,
-  User2Icon,
-  UserIcon,
-} from "lucide-react";
+import { ShoppingBag, ShoppingCartIcon, User2Icon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router";
 
 const Header = () => {
@@ -22,6 +21,8 @@ const Header = () => {
   const headerRef = useRef(null);
 
   const { pathname } = useLocation();
+
+  const cartItemCount = useSelector(cartItemsCountSelector);
 
   useEffect(() => {
     if (headerRef.current) {
@@ -117,9 +118,14 @@ const Header = () => {
             </NavigationMenuItem>
 
             <NavigationMenuItem>
-              <NavigationMenuLink render={<Link to="/" />}>
+              <Button className="bg-transparent text-primary rounded-full p-3 hover:bg-primary/70 hover:text-warm-cream relative">
                 <ShoppingCartIcon className="size-5" />
-              </NavigationMenuLink>
+                {cartItemCount > 0 && (
+                  <Badge className="bg-red-500 text-[0.7rem] p-[0.4rem] rounded-full absolute translate-x-3 translate-y-2">
+                    {cartItemCount}
+                  </Badge>
+                )}
+              </Button>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
