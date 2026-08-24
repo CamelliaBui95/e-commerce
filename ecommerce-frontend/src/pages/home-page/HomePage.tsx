@@ -27,7 +27,7 @@ const serviceHighlights = [
 const HomePage = () => {
   const { data } = useSearchProducts({
     pageNumber: 0,
-    pageSize: 5,
+    pageSize: 4,
     direction: SortDirection.DESC,
   });
 

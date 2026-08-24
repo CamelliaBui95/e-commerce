@@ -16,5 +16,6 @@ export const useSearchProducts = (query: Partial<ProductSearchQuery>) => {
     queryKey: productKeys.list(query),
     queryFn: () => productService.searchProducts(query),
     placeholderData: keepPreviousData,
+    staleTime: 60 * 60 * 1000,
   });
 };
