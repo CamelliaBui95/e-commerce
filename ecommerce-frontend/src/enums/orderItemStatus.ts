@@ -1,0 +1,5 @@
+export enum OrderItemStatus {
+  REQUESTED = "REQUESTED",
+  UNAVAILABLE = "UNAVAILABLE",
+  AVAILABLE = "AVAILABLE",
+}

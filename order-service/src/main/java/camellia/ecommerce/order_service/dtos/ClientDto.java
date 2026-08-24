@@ -2,7 +2,9 @@ package camellia.ecommerce.order_service.dtos;
 
 import java.util.UUID;
 
-public record ClientDto(UUID publicId, String firstName, String lastName, String address, String email,
-        String phoneNumber) {
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+public record ClientDto(@JsonProperty("id") UUID publicId, @JsonProperty("first_name") String firstName,
+                @JsonProperty("last_name") String lastName, @JsonProperty("address") String address, String email,
+                @JsonProperty("phone_number") String phoneNumber) {
 }
