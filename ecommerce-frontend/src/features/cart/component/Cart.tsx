@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { cartItemsCountSelector, cartItemsSelector } from "../cartSelector";
 import { ItemGroup } from "@/components/ui/item";
 import { cn } from "@/lib/utils";
-import { addToCart, decrementItem } from "../cartSlice";
+import { addToCart, decrementItem, removeFromCart } from "../cartSlice";
 import type { OrderItem } from "@/models/order";
 import CartItem from "./CartItem";
 
@@ -27,8 +27,12 @@ const Cart = () => {
     dispatch(addToCart(item));
   };
 
-  const handleRemoveItem = (item: OrderItem) => {
+  const handleDecrementItem = (item: OrderItem) => {
     dispatch(decrementItem(item));
+  };
+
+  const handleRemoveItem = (item: OrderItem) => {
+    dispatch(removeFromCart(item));
   };
 
   const totalPrice = useMemo(() => {
@@ -63,7 +67,8 @@ const Cart = () => {
                 <CartItem
                   item={item}
                   onAdd={() => handleAddItem(item)}
-                  onDecrement={() => handleRemoveItem(item)}
+                  onDecrement={() => handleDecrementItem(item)}
+                  onRemove={() => handleRemoveItem(item)}
                 />
               ))}
             </ItemGroup>

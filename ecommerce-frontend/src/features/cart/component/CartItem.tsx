@@ -17,9 +17,15 @@ export interface CartItemProps {
   item: OrderItem;
   onAdd: () => void;
   onDecrement: () => void;
+  onRemove: () => void;
 }
 
-const CartItem: React.FC<CartItemProps> = ({ item, onAdd, onDecrement }) => {
+const CartItem: React.FC<CartItemProps> = ({
+  item,
+  onAdd,
+  onDecrement,
+  onRemove,
+}) => {
   return (
     <Item key={item.product_id} variant="outline" role="listitem">
       <ItemMedia variant="image" className="h-20 w-16">
@@ -51,7 +57,11 @@ const CartItem: React.FC<CartItemProps> = ({ item, onAdd, onDecrement }) => {
           >
             <PlusIcon />
           </Button>
-          <Button size="icon" className={import.meta.env.VITE_BUTTON_STYLE}>
+          <Button
+            size="icon"
+            className={import.meta.env.VITE_BUTTON_STYLE}
+            onClick={onRemove}
+          >
             <TrashIcon />
           </Button>
         </ItemActions>
