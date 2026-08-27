@@ -7,7 +7,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { ShoppingCartIcon } from "lucide-react";
+import { MinusIcon, PlusIcon, ShoppingCartIcon, TrashIcon } from "lucide-react";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { cartItemsCountSelector, cartItemsSelector } from "../cartSelector";
@@ -17,9 +17,11 @@ import {
   ItemMedia,
   ItemTitle,
   ItemContent,
+  ItemActions,
 } from "@/components/ui/item";
 import productService from "@/services/productService";
 import { ImageSize } from "@/enums/ImageSize";
+import { cn } from "@/lib/utils";
 
 const Cart = () => {
   const cartItemCount = useSelector(cartItemsCountSelector);
@@ -27,7 +29,7 @@ const Cart = () => {
 
   const cartButton = useMemo(() => {
     return (
-      <Button className="bg-transparent text-primary rounded-full p-3 hover:bg-primary/70 hover:text-warm-cream relative">
+      <Button className={cn("relative", import.meta.env.VITE_BUTTON_STYLE)}>
         <ShoppingCartIcon className="size-5" />
         {cartItemCount > 0 && (
           <Badge className="bg-red-500 text-[0.7rem] p-[0.4rem] rounded-full absolute translate-x-3 translate-y-3">
@@ -43,7 +45,7 @@ const Cart = () => {
       <SheetContent>
         <SheetHeader>
           <SheetTitle>{`My Cart (${cartItemCount})`}</SheetTitle>
-          <div className="flex w-full max-w-md flex-col gap-6">
+          <div className="flex w-full max-w-md flex-col gap-6 py-2">
             <ItemGroup className="gap-4">
               {cartItems.map((item) => (
                 <Item key={item.product_id} variant="outline" role="listitem">
@@ -61,6 +63,26 @@ const Cart = () => {
                     <ItemTitle className="line-clamp-1">
                       {item.product_name}
                     </ItemTitle>
+                    <ItemActions>
+                      <Button
+                        size="icon"
+                        className={import.meta.env.VITE_BUTTON_STYLE}
+                      >
+                        <MinusIcon />
+                      </Button>
+                      <Button
+                        size="icon"
+                        className={import.meta.env.VITE_BUTTON_STYLE}
+                      >
+                        <PlusIcon />
+                      </Button>
+                      <Button
+                        size="icon"
+                        className={import.meta.env.VITE_BUTTON_STYLE}
+                      >
+                        <TrashIcon />
+                      </Button>
+                    </ItemActions>
                   </ItemContent>
                 </Item>
               ))}
