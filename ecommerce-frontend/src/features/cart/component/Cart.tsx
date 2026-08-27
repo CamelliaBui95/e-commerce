@@ -7,25 +7,36 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { MinusIcon, PlusIcon, ShoppingCartIcon, TrashIcon } from "lucide-react";
+import { ShoppingCartIcon } from "lucide-react";
 import { useMemo } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { cartItemsCountSelector, cartItemsSelector } from "../cartSelector";
-import {
-  Item,
-  ItemGroup,
-  ItemMedia,
-  ItemTitle,
-  ItemContent,
-  ItemActions,
-} from "@/components/ui/item";
-import productService from "@/services/productService";
-import { ImageSize } from "@/enums/ImageSize";
+import { ItemGroup } from "@/components/ui/item";
 import { cn } from "@/lib/utils";
+import { addToCart, decrementItem } from "../cartSlice";
+import type { OrderItem } from "@/models/order";
+import CartItem from "./CartItem";
 
 const Cart = () => {
   const cartItemCount = useSelector(cartItemsCountSelector);
   const cartItems = useSelector(cartItemsSelector);
+
+  const dispatch = useDispatch();
+
+  const handleAddItem = (item: OrderItem) => {
+    dispatch(addToCart(item));
+  };
+
+  const handleRemoveItem = (item: OrderItem) => {
+    dispatch(decrementItem(item));
+  };
+
+  const totalPrice = useMemo(() => {
+    return cartItems.reduce(
+      (acc, item) => acc + item.unit_price * item.quantity,
+      0
+    );
+  }, [cartItems]);
 
   const cartButton = useMemo(() => {
     return (
@@ -39,54 +50,32 @@ const Cart = () => {
       </Button>
     );
   }, [cartItemCount]);
+
   return (
     <Sheet>
       <SheetTrigger render={cartButton} />
       <SheetContent>
-        <SheetHeader>
-          <SheetTitle>{`My Cart (${cartItemCount})`}</SheetTitle>
-          <div className="flex w-full max-w-md flex-col gap-6 py-2">
-            <ItemGroup className="gap-4">
+        <SheetHeader className="h-full">
+          <SheetTitle className="font-bold">{`My Cart (${cartItemCount})`}</SheetTitle>
+          <div className="flex w-full max-w-md flex-col gap-1 py-2 h-full">
+            <ItemGroup className="gap-4 min-h-9/10 border-2 rounded-lg p-2">
               {cartItems.map((item) => (
-                <Item key={item.product_id} variant="outline" role="listitem">
-                  <ItemMedia variant="image" className="h-20 w-16">
-                    <img
-                      src={productService.getProductImageUrl(
-                        item?.image_name,
-                        ImageSize.SMALL
-                      )}
-                      alt={item?.product_name}
-                      className="object-cover"
-                    />
-                  </ItemMedia>
-                  <ItemContent>
-                    <ItemTitle className="line-clamp-1">
-                      {item.product_name}
-                    </ItemTitle>
-                    <ItemActions>
-                      <Button
-                        size="icon"
-                        className={import.meta.env.VITE_BUTTON_STYLE}
-                      >
-                        <MinusIcon />
-                      </Button>
-                      <Button
-                        size="icon"
-                        className={import.meta.env.VITE_BUTTON_STYLE}
-                      >
-                        <PlusIcon />
-                      </Button>
-                      <Button
-                        size="icon"
-                        className={import.meta.env.VITE_BUTTON_STYLE}
-                      >
-                        <TrashIcon />
-                      </Button>
-                    </ItemActions>
-                  </ItemContent>
-                </Item>
+                <CartItem
+                  item={item}
+                  onAdd={() => handleAddItem(item)}
+                  onDecrement={() => handleRemoveItem(item)}
+                />
               ))}
             </ItemGroup>
+            <ul className="py-2">
+              <li className="text-lg font-bold flex flex-row justify-between my-1">
+                <span>Total</span>
+                <span>{totalPrice} euro</span>
+              </li>
+              <li className="text-center">
+                <Button className="py-2 px-4">Process Order</Button>
+              </li>
+            </ul>
           </div>
         </SheetHeader>
       </SheetContent>
