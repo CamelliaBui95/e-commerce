@@ -75,7 +75,7 @@ const Cart = () => {
             <ul className="py-2">
               <li className="text-lg font-bold flex flex-row justify-between my-1">
                 <span>Total</span>
-                <span>{totalPrice} euro</span>
+                <span>{totalPrice.toFixed(2)} euro</span>
               </li>
               <li className="text-center">
                 <Button className="py-2 px-4">Process Order</Button>

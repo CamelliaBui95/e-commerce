@@ -1,8 +1,8 @@
 import "./homePage.scss";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, RotateCcw, ShieldCheck, Truck } from "lucide-react";
-import ServiceHighlight from "../components/service-highlight/ServiceHighlight";
-import ProductCard from "../components/ProductCard";
+import ServiceHighlight from "../../components/ui/service-highlight/ServiceHighlight";
+import ProductCard from "../../features/product/ProductCard";
 import { useSearchProducts } from "@/hooks/useProducts";
 import { SortDirection } from "@/enums/sortDirection";
 import { useDispatch } from "react-redux";
