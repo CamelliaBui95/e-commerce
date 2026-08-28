@@ -50,7 +50,7 @@ const HomePage = () => {
   };
 
   return (
-    <div className="h-screen">
+    <div>
       <section className="hero-section bg-soft-ivory w-screen h-3/4 flex flex-row items-center justify-between overflow-hidden">
         <div className="hero-content">
           <p>
