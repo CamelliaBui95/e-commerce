@@ -10,40 +10,16 @@ import {
 } from "@/components/ui/sheet";
 import { ShoppingCartIcon } from "lucide-react";
 import { useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { cartItemsCountSelector, cartItemsSelector } from "../cartSelector";
-import { ItemGroup } from "@/components/ui/item";
+import { useSelector } from "react-redux";
+import { cartItemsCountSelector, cartTotalSelector } from "../cartSelector";
 import { cn } from "@/lib/utils";
-import { addToCart, decrementItem, removeFromCart } from "../cartSlice";
-import type { OrderItem } from "@/models/order";
-import CartItem from "./CartItem";
 import { useNavigate } from "react-router";
+import CartItems from "./CartItems";
 
 const Cart = () => {
   const cartItemCount = useSelector(cartItemsCountSelector);
-  const cartItems = useSelector(cartItemsSelector);
+  const cartTotal = useSelector(cartTotalSelector);
   const navigate = useNavigate();
-
-  const dispatch = useDispatch();
-
-  const handleAddItem = (item: OrderItem) => {
-    dispatch(addToCart(item));
-  };
-
-  const handleDecrementItem = (item: OrderItem) => {
-    dispatch(decrementItem(item));
-  };
-
-  const handleRemoveItem = (item: OrderItem) => {
-    dispatch(removeFromCart(item));
-  };
-
-  const totalPrice = useMemo(() => {
-    return cartItems.reduce(
-      (acc, item) => acc + item.unit_price * item.quantity,
-      0
-    );
-  }, [cartItems]);
 
   const cartButton = useMemo(() => {
     return (
@@ -65,20 +41,11 @@ const Cart = () => {
         <SheetHeader className="h-full">
           <SheetTitle className="font-bold">{`My Cart (${cartItemCount})`}</SheetTitle>
           <div className="flex w-full max-w-md flex-col gap-1 py-2 h-full">
-            <ItemGroup className="gap-4 min-h-9/10 border-2 rounded-lg p-2">
-              {cartItems.map((item) => (
-                <CartItem
-                  item={item}
-                  onAdd={() => handleAddItem(item)}
-                  onDecrement={() => handleDecrementItem(item)}
-                  onRemove={() => handleRemoveItem(item)}
-                />
-              ))}
-            </ItemGroup>
+            <CartItems />
             <ul className="py-2">
               <li className="text-lg font-bold flex flex-row justify-between my-1">
                 <span>Total</span>
-                <span>{totalPrice.toFixed(2)} euro</span>
+                <span>{cartTotal} euro</span>
               </li>
               <li className="text-center">
                 <SheetClose

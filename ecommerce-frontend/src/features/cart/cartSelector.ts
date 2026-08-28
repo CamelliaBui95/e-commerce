@@ -7,3 +7,11 @@ export const cartItemsCountSelector = (root: RootState) =>
     (acc: number, item: OrderItem) => acc + item.quantity,
     0
   );
+
+export const cartTotalSelector = (root: RootState) =>
+  root.cart.items
+    .reduce(
+      (acc: number, item: OrderItem) => acc + item.quantity * item.unit_price,
+      0
+    )
+    .toFixed(2);
