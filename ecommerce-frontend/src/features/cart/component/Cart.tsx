@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetHeader,
   SheetTitle,
@@ -16,10 +17,12 @@ import { cn } from "@/lib/utils";
 import { addToCart, decrementItem, removeFromCart } from "../cartSlice";
 import type { OrderItem } from "@/models/order";
 import CartItem from "./CartItem";
+import { useNavigate } from "react-router";
 
 const Cart = () => {
   const cartItemCount = useSelector(cartItemsCountSelector);
   const cartItems = useSelector(cartItemsSelector);
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
 
@@ -78,7 +81,16 @@ const Cart = () => {
                 <span>{totalPrice.toFixed(2)} euro</span>
               </li>
               <li className="text-center">
-                <Button className="py-2 px-4">Process Order</Button>
+                <SheetClose
+                  render={
+                    <Button
+                      className="py-2 px-4"
+                      onClick={() => navigate("/checkout")}
+                    >
+                      Checkout
+                    </Button>
+                  }
+                />
               </li>
             </ul>
           </div>
