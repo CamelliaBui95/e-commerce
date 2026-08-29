@@ -8,6 +8,11 @@ const createOrder = async (order: Partial<Order>): Promise<Order> => {
   return res.data;
 };
 
+const getBaseURL = () => {
+  return orderApi.defaults.baseURL;
+};
+
 export default {
   createOrder,
+  getBaseURL,
 };

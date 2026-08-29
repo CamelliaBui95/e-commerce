@@ -20,3 +20,8 @@ export type Order = {
   status?: OrderStatus;
   client?: Client;
 };
+
+export type OrderStatusEvent = {
+  order_id: UUID;
+  status: OrderStatus;
+}

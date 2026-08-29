@@ -7,8 +7,8 @@ import {
   cartItemsCountSelector,
   cartItemsSelector,
 } from "@/features/cart/cartSelector";
-import { orderStatusSelector } from "@/features/order/orderSelector";
 import { setOrder, setOrderStatus } from "@/features/order/orderSlice";
+import { useOrderStatus } from "@/hooks/useOrderStatus";
 import type { Client } from "@/models/client";
 import type { Order } from "@/models/order";
 import orderService from "@/services/orderService";
@@ -27,7 +27,7 @@ const initialClient: Client = {
 const ContactForm = () => {
   const cartItemCount = useSelector(cartItemsCountSelector);
   const cartItems = useSelector(cartItemsSelector);
-  const orderStatus = useSelector(orderStatusSelector);
+  const { connected, status: orderStatus } = useOrderStatus();
 
   const [client, setClient] = useState<Client>(initialClient);
 
