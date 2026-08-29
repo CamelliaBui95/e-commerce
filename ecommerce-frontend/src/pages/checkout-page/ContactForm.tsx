@@ -50,7 +50,15 @@ const ContactForm = () => {
     try {
       const orderCreated = await orderService.createOrder(order);
       if (orderCreated) {
-        dispatch(setOrder(orderCreated));
+        dispatch(
+          setOrder({
+            ...order,
+            id: orderCreated.id,
+            status: orderCreated.status,
+            client: orderCreated.client,
+            created_at: orderCreated.created_at,
+          })
+        );
       }
     } catch {
       dispatch(setOrderStatus(OrderStatus.ORDER_CREATION_FAILED));

@@ -42,7 +42,7 @@ export function useOrderStatus() {
     return () => {
       eventSource.close();
     };
-  }, [currentOrder, dispatch]);
+  }, [currentOrder, currentOrder?.id, dispatch]);
 
   return {
     connected,

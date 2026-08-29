@@ -14,7 +14,7 @@ const searchProducts = async (
 };
 
 const getProductImageUrl = (
-  imageName: string,
+  imageName: string | undefined,
   size: ImageSize
 ): string | undefined => {
   if (!imageName) return undefined;

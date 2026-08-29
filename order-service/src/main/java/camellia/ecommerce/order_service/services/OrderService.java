@@ -91,4 +91,8 @@ public class OrderService {
         log.info("Published ORDER_CREATED event: " + orderEvent);
     }
 
+    public Order findOrder(UUID publicId) {
+        return orderCRUDService.findByPublicId(publicId);
+    }
+
 }

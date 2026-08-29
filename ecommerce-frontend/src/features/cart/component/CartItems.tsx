@@ -29,6 +29,7 @@ const CartItems: React.FC<CartItemsProps> = ({ className }) => {
     <ItemGroup className={cn("gap-4", className)}>
       {cartItems.map((item) => (
         <CartItem
+          key={item.product_id}
           item={item}
           onAdd={() => handleAddItem(item)}
           onDecrement={() => handleDecrementItem(item)}

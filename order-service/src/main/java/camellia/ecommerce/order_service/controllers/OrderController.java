@@ -40,9 +40,20 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(orderMapper.toDto(newOrder));
     }
 
-    @GetMapping(value="/{orderId}/events", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter subscribe(@PathVariable UUID orderId) {
-        return orderSSEService.subscribe(orderId);
+    @GetMapping(value = "/{orderId}/events", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public ResponseEntity<SseEmitter> subscribe(@PathVariable UUID orderId) {
+        Order order = orderService.findOrder(orderId);
+
+        if (order == null) {
+
+            return ResponseEntity.notFound().build();
+        }
+        
+        SseEmitter emitter = orderSSEService.subscribe(orderId);
+
+        orderSSEService.sendStatus(orderId, order.getStatus());
+        return ResponseEntity.ok(emitter);
+
     }
 
 }
