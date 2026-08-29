@@ -22,7 +22,7 @@ export function useOrderStatus() {
     }
 
     const eventSource = new EventSource(
-      `${orderService.getBaseURL()}/orders/${currentOrder.id}/events`
+      `${orderService.getURL()}/${currentOrder.id}/events`
     );
 
     eventSource.onopen = () => {

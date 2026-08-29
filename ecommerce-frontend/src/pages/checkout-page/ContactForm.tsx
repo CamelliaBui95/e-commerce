@@ -53,7 +53,7 @@ const ContactForm = () => {
         dispatch(setOrder(orderCreated));
       }
     } catch {
-      dispatch(setOrderStatus(OrderStatus.ORDER_FAILED));
+      dispatch(setOrderStatus(OrderStatus.ORDER_CREATION_FAILED));
     }
   };
 

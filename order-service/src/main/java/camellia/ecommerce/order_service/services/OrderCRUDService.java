@@ -37,7 +37,7 @@ public class OrderCRUDService {
         order.setItems(orderItems);
         order.setCreatedAt(ZonedDateTime.now());
         order.setPublicId(UUID.randomUUID());
-        order.setStatus(OrderStatus.INVENTORY_PENDING);
+        order.setStatus(OrderStatus.ORDER_CREATING);
         order.setLastUpdatedAt(ZonedDateTime.now());
 
         return orderRepository.save(order);

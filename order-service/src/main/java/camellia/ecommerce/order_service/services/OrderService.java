@@ -8,6 +8,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import camellia.ecommerce.order_service.dtos.OrderDto;
+import camellia.ecommerce.order_service.dtos.OrderStatusEvent;
 import camellia.ecommerce.order_service.entities.Order;
 import camellia.ecommerce.order_service.enums.OrderItemStatus;
 import camellia.ecommerce.order_service.enums.OrderStatus;
@@ -27,6 +28,8 @@ public class OrderService {
 
     private final OrderCRUDService orderCRUDService;
 
+    private final OrderSSEService orderSSEService;
+
     private final OrderMapper orderMapper;
 
     public Order createOrder(OrderDto newOrderDto) {
@@ -42,7 +45,9 @@ public class OrderService {
         UUID orderPublicId = inventoryEvent.orderId();
 
         Order order = orderCRUDService.findByPublicId(orderPublicId);
-        order.setStatus(OrderStatus.INVENTORY_REJECTED);
+
+        OrderStatus status = OrderStatus.INVENTORY_REJECTED;
+        order.setStatus(status);
 
         List<UUID> unavailableItems = inventoryEvent.unavailableItems().stream().map(item -> item.itemId()).toList();
 
@@ -55,6 +60,7 @@ public class OrderService {
         });
 
         orderCRUDService.save(order);
+        orderSSEService.sendStatus(orderPublicId, status);
     }
 
     @KafkaListener(topics = "INVENTORY_RESERVED", containerFactory = "inventoryEventKafkaListenerContainerFactory")
@@ -62,13 +68,16 @@ public class OrderService {
         UUID orderId = inventoryEvent.orderId();
 
         Order order = orderCRUDService.findByPublicId(orderId);
-        order.setStatus(OrderStatus.INVENTORY_RESERVED);
+
+        OrderStatus status = OrderStatus.INVENTORY_RESERVED;
+        order.setStatus(status);
 
         order.getItems().stream().forEach(item -> {
             item.setStatus(OrderItemStatus.AVAILABLE);
         });
 
         orderCRUDService.save(order);
+        orderSSEService.sendStatus(orderId, status);
     }
 
     public void publishOrderCreatedEvent(Order order) {
@@ -77,6 +86,8 @@ public class OrderService {
         String messageKey = order.getPublicId().toString();
 
         kafkaTemplate.send(Topic.ORDER_CREATED.name(), messageKey, orderEvent);
+        orderSSEService.sendStatus(order.getPublicId(), order.getStatus());
+        
         log.info("Published ORDER_CREATED event: " + orderEvent);
     }
 
