@@ -16,7 +16,7 @@ export type OrderItem = {
 export type Order = {
   id?: UUID;
   items: OrderItem[];
-  created_at: string;
+  created_at?: string;
   status?: OrderStatus;
   client?: Client;
 };

@@ -1,4 +1,4 @@
-package camellia.ecommerce.inventory_service.configuration;
+package camellia.ecommerce.order_service.configuration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

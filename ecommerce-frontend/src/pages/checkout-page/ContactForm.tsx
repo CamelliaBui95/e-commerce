@@ -2,11 +2,19 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { cartItemsCountSelector } from "@/features/cart/cartSelector";
+import { OrderStatus } from "@/enums/orderStatus";
+import {
+  cartItemsCountSelector,
+  cartItemsSelector,
+} from "@/features/cart/cartSelector";
+import { orderStatusSelector } from "@/features/order/orderSelector";
+import { setOrder, setOrderStatus } from "@/features/order/orderSlice";
 import type { Client } from "@/models/client";
-import { ArrowRight, LogInIcon } from "lucide-react";
-import { useState, type ChangeEvent, type FormEvent } from "react";
-import { useSelector } from "react-redux";
+import type { Order } from "@/models/order";
+import orderService from "@/services/orderService";
+import { ArrowRight, Loader, LogInIcon } from "lucide-react";
+import { useMemo, useState, type ChangeEvent, type FormEvent } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const initialClient: Client = {
   first_name: "",
@@ -18,18 +26,47 @@ const initialClient: Client = {
 
 const ContactForm = () => {
   const cartItemCount = useSelector(cartItemsCountSelector);
+  const cartItems = useSelector(cartItemsSelector);
+  const orderStatus = useSelector(orderStatusSelector);
+
   const [client, setClient] = useState<Client>(initialClient);
+
+  const dispatch = useDispatch();
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setClient((previous) => ({ ...previous, [name]: value }));
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    dispatch(setOrderStatus(OrderStatus.ORDER_CREATING));
 
-    console.log(client);
+    const order: Order = {
+      items: cartItems,
+      client: client,
+    };
+
+    try {
+      const orderCreated = await orderService.createOrder(order);
+      if (orderCreated) {
+        dispatch(setOrder(orderCreated));
+      }
+    } catch {
+      dispatch(setOrderStatus(OrderStatus.ORDER_FAILED));
+    }
   };
+
+  const isOrderPending = useMemo(() => {
+    switch (orderStatus) {
+      case OrderStatus.INVENTORY_PENDING:
+        return true;
+      case OrderStatus.ORDER_CREATING:
+        return true;
+      default:
+        return false;
+    }
+  }, [orderStatus]);
 
   return (
     <form
@@ -118,10 +155,10 @@ const ContactForm = () => {
           type="submit"
           size="lg"
           className="w-full"
-          disabled={cartItemCount === 0}
+          disabled={cartItemCount === 0 || isOrderPending}
         >
-          Next
-          <ArrowRight />
+          {isOrderPending ? "Confirming" : "Next"}
+          {isOrderPending ? <Loader /> : <ArrowRight />}
         </Button>
         <div className="flex items-center gap-3 py-1">
           <Separator className="flex-1" />
@@ -131,7 +168,7 @@ const ContactForm = () => {
         <Button
           size="lg"
           className="w-full"
-          disabled={cartItemCount === 0}
+          disabled={cartItemCount === 0 || isOrderPending}
           variant="secondary"
         >
           Sign In
