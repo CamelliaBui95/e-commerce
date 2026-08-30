@@ -34,9 +34,7 @@ public class Product {
     private String name;
 
     @Column(nullable = false)
-    private Integer numberInStock = 0;
-
-    private Integer numberReserved = 0;
+    private Long numberInStock = 0L;
 
     @Column(nullable = false)
     private Double price = 0.0;

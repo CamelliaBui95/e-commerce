@@ -33,13 +33,13 @@ public class InventoryReservation {
     private UUID productId;
 
     @Column(nullable = false)
-    private Integer quantity;
+    private Long quantity;
 
     @Column(nullable = false, columnDefinition = "varchar(50)")
     @Enumerated(EnumType.STRING)
     private ReservationStatus status;
 
-    public InventoryReservation(UUID orderId, UUID productId, int quantity, ReservationStatus status) {
+    public InventoryReservation(UUID orderId, UUID productId, Long quantity, ReservationStatus status) {
         this.orderId = orderId;
         this.productId = productId;
         this.quantity = quantity;

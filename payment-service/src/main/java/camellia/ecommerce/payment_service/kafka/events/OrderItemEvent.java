@@ -1,4 +1,4 @@
-package camellia.ecommerce.order_service.kafka.events;
+package camellia.ecommerce.payment_service.kafka.events;
 
 import java.util.UUID;
 

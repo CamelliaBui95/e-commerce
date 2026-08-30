@@ -35,7 +35,7 @@ public class Payment {
     private UUID orderId;
 
     @Column(nullable = false)
-    private Double amount;
+    private BigDecimal amount;
 
     @Column(nullable = false, columnDefinition = "varchar(50)")
     @Enumerated(EnumType.STRING)

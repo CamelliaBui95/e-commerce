@@ -9,6 +9,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import camellia.ecommerce.inventory_service.entities.Product;
+import camellia.ecommerce.inventory_service.enums.ReservationStatus;
 import camellia.ecommerce.inventory_service.kafka.Topic;
 import camellia.ecommerce.inventory_service.kafka.events.InventoryEvent;
 import camellia.ecommerce.inventory_service.kafka.events.OrderEvent;
@@ -23,6 +24,8 @@ public class InventoryService {
 
     private final ProductService productService;
 
+    private final InventoryReservationService inventoryReservationService;
+
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
     @KafkaListener(topics = "ORDER_CREATED", containerFactory = "orderEventKafkaListenerContainerFactory")
@@ -34,8 +37,8 @@ public class InventoryService {
 
         items.stream().forEach(item -> {
             Product product = productService.findByPublicId(item.productId());
-            int numberReserved = product.getNumberReserved();
-            int availableStock = product.getNumberInStock() - numberReserved;
+            long numberReserved = inventoryReservationService.findReservedQuantityOfProduct(item.productId());
+            long availableStock = product.getNumberInStock() - numberReserved;
 
             if (item.quantity() <= availableStock) {
                 availableItems.add(item);
@@ -49,10 +52,8 @@ public class InventoryService {
         } else {
 
             availableItems.stream().forEach(item -> {
-                Product product = productService.findByPublicId(item.productId());
-                int numberReserved = product.getNumberReserved();
-
-                productService.updateNumberReserved(product, numberReserved + item.quantity());
+                inventoryReservationService.create(orderEvent.publicId(), item.productId(), item.quantity(),
+                        ReservationStatus.RESERVED);
             });
 
             publishInventoryReservedEvent(orderEvent.publicId(), availableItems, unavailableItems);
@@ -62,13 +63,17 @@ public class InventoryService {
 
     public void publishInventoryReservedEvent(UUID orderId, List<OrderItemEvent> availableItems,
             List<OrderItemEvent> unavailableItems) {
-        InventoryEvent inventoryEvent = new InventoryEvent(orderId, availableItems, unavailableItems);
+
+        Double totalPrice = availableItems.stream().map(item -> item.unitPrice() * item.quantity()).reduce(0.0,
+                (subtotal, number) -> subtotal + number);
+
+        InventoryEvent inventoryEvent = new InventoryEvent(orderId, availableItems, unavailableItems, totalPrice);
         publishInventoryEvent(orderId, inventoryEvent, Topic.INVENTORY_RESERVED);
     }
 
     public void publishInventoryRejectedEvent(UUID orderId, List<OrderItemEvent> availableItems,
             List<OrderItemEvent> unavailableItems) {
-        InventoryEvent inventoryEvent = new InventoryEvent(orderId, availableItems, unavailableItems);
+        InventoryEvent inventoryEvent = new InventoryEvent(orderId, availableItems, unavailableItems, 0.0);
         publishInventoryEvent(orderId, inventoryEvent, Topic.INVENTORY_REJECTED);
     }
 

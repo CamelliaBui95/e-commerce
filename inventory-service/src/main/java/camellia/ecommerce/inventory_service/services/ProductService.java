@@ -9,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import camellia.ecommerce.inventory_service.dtos.ProductDto;
 import camellia.ecommerce.inventory_service.dtos.ProductSearchQuery;
@@ -57,11 +56,6 @@ public class ProductService {
 
     public Product save(Product product) {
         return productRepository.save(product);
-    }
-
-    @Transactional
-    public void updateNumberReserved(Product product, int numberReserved) {
-        productRepository.updateNumberReserved(product.getId(), numberReserved);
     }
 
 }
