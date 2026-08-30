@@ -15,3 +15,11 @@ export const orderApi = axios.create({
   },
   timeout: 10000,
 });
+
+export const paymentApi = axios.create({
+  baseURL: import.meta.env.VITE_PAYMENT_API_BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+  timeout: 10000,
+});
