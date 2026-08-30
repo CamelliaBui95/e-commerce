@@ -68,7 +68,7 @@ public class OrderService {
 
         Order order = orderCRUDService.findByPublicId(orderId);
 
-        OrderStatus status = OrderStatus.INVENTORY_RESERVED;
+        OrderStatus status = OrderStatus.PAYMENT_PENDING;
         order.setStatus(status);
 
         order.getItems().stream().forEach(item -> {
@@ -86,7 +86,7 @@ public class OrderService {
 
         kafkaTemplate.send(Topic.ORDER_CREATED.name(), messageKey, orderEvent);
         orderSSEService.sendStatus(order.getPublicId(), order.getStatus());
-        
+
         log.info("Published ORDER_CREATED event: " + orderEvent);
     }
 
