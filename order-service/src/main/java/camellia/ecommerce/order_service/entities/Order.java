@@ -35,7 +35,7 @@ public class Order {
     @Column(nullable = false)
     private UUID publicId;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> items;
 
     @Column(nullable = false)

@@ -43,11 +43,6 @@ public class OrderController {
     @GetMapping(value = "/{orderId}/events", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public ResponseEntity<SseEmitter> subscribe(@PathVariable UUID orderId) {
         Order order = orderService.findOrder(orderId);
-
-        if (order == null) {
-
-            return ResponseEntity.notFound().build();
-        }
         
         SseEmitter emitter = orderSSEService.subscribe(orderId);
 

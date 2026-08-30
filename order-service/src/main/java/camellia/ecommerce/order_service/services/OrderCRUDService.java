@@ -14,6 +14,7 @@ import camellia.ecommerce.order_service.entities.OrderItem;
 import camellia.ecommerce.order_service.enums.OrderStatus;
 import camellia.ecommerce.order_service.mappers.OrderMapper;
 import camellia.ecommerce.order_service.repositories.OrderRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -27,6 +28,7 @@ public class OrderCRUDService {
 
     private final ClientService clientService;
 
+    @Transactional
     public Order create(OrderDto orderDto) {
         List<OrderItem> orderItems = orderItemService.createAll(orderDto.getItems());
         Client client = clientService.create(orderDto.getClient());

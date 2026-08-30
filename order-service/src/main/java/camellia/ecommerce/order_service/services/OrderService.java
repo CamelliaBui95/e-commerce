@@ -8,7 +8,6 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import camellia.ecommerce.order_service.dtos.OrderDto;
-import camellia.ecommerce.order_service.dtos.OrderStatusEvent;
 import camellia.ecommerce.order_service.entities.Order;
 import camellia.ecommerce.order_service.enums.OrderItemStatus;
 import camellia.ecommerce.order_service.enums.OrderStatus;
