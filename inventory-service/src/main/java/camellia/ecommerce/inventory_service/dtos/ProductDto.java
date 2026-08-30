@@ -24,10 +24,6 @@ public class ProductDto {
     @JsonProperty("stock")
     private Integer numberInStock;
 
-    @JsonProperty("number_reserved")
-    @JsonInclude(Include.NON_EMPTY)
-    private Integer numberReserved;
-
     private Double price;
 
     private Category category;

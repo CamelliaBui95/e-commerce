@@ -1,10 +1,8 @@
-package camellia.ecommerce.payment_service.entities;
+package camellia.ecommerce.inventory_service.entities;
 
-import java.math.BigDecimal;
-import java.time.ZonedDateTime;
 import java.util.UUID;
 
-import camellia.ecommerce.payment_service.enums.PaymentStatus;
+import camellia.ecommerce.inventory_service.enums.ReservationStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -18,32 +16,33 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Entity
-@Table(name = "payment")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Payment {
+@Entity
+@Table(name = "inventory_reservation")
+public class InventoryReservation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private UUID publicId;
-
     @Column(nullable = false)
     private UUID orderId;
 
     @Column(nullable = false)
-    private Double amount;
+    private UUID productId;
+
+    @Column(nullable = false)
+    private Integer quantity;
 
     @Column(nullable = false, columnDefinition = "varchar(50)")
     @Enumerated(EnumType.STRING)
-    private PaymentStatus status;
+    private ReservationStatus status;
 
-    private String stripePaymentIntentId;
-
-    private ZonedDateTime createdAt;
-
-    private ZonedDateTime processedAt;
+    public InventoryReservation(UUID orderId, UUID productId, int quantity, ReservationStatus status) {
+        this.orderId = orderId;
+        this.productId = productId;
+        this.quantity = quantity;
+        this.status = status;
+    }
 }
