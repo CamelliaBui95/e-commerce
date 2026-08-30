@@ -32,7 +32,13 @@ export function useOrderStatus() {
     eventSource.addEventListener("order-status", (event) => {
       const msg = event as MessageEvent;
       const data: OrderStatusEvent = JSON.parse(msg.data);
-      dispatch(setOrderStatus(data.status));
+
+      if (
+        data.status !== currentOrderStatus ||
+        data.order_id !== currentOrder.id
+      ) {
+        dispatch(setOrderStatus(data.status));
+      }
     });
 
     eventSource.onerror = () => {
@@ -42,7 +48,7 @@ export function useOrderStatus() {
     return () => {
       eventSource.close();
     };
-  }, [currentOrder, currentOrder?.id, dispatch]);
+  }, [currentOrder, currentOrderStatus, dispatch]);
 
   return {
     connected,
