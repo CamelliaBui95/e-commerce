@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
 
 import camellia.ecommerce.payment_service.dtos.PaymentSessionRes;

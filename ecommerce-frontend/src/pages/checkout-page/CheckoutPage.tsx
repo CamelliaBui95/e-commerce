@@ -6,12 +6,18 @@ import {
 import CartItems from "@/features/cart/component/CartItems";
 import OrderItems from "@/features/order/component/OrderItems";
 import {
+  orderIdSelector,
   orderItemsCountSelector,
   orderStatusSelector,
   orderTotalSelector,
 } from "@/features/order/orderSelector";
 import ContactForm from "./ContactForm";
 import { useSelector } from "react-redux";
+import CheckoutForm from "./CheckoutForm";
+import { useOrderStatus } from "@/hooks/useOrderStatus";
+import paymentService from "@/services/paymentService";
+import { useEffect, useMemo, useState } from "react";
+import type { UUID } from "@/models/uuid";
 
 const PAYMENT_STEP_STATUSES: OrderStatus[] = [
   OrderStatus.PAYMENT_PENDING,
@@ -27,19 +33,35 @@ const ORDER_PENDING_STATUSES: OrderStatus[] = [
 ];
 
 const CheckoutPage = () => {
-  const orderStatus = useSelector(orderStatusSelector);
+  const { connected, status: orderStatus } = useOrderStatus();
   const isPaymentStep =
     !!orderStatus && PAYMENT_STEP_STATUSES.includes(orderStatus);
   const isOrderPending =
     !!orderStatus && ORDER_PENDING_STATUSES.includes(orderStatus);
 
+  const isPayable = orderStatus === OrderStatus.PAYMENT_PENDING;
+
   const cartItemCount = useSelector(cartItemsCountSelector);
   const cartTotal = useSelector(cartTotalSelector);
+
+  const orderId = useSelector(orderIdSelector);
   const orderItemCount = useSelector(orderItemsCountSelector);
   const orderTotal = useSelector(orderTotalSelector);
 
   const itemCount = isPaymentStep ? orderItemCount : cartItemCount;
   const total = isPaymentStep ? orderTotal : cartTotal;
+
+  const [paymentId, setPaymentId] = useState<UUID>(null);
+
+  useEffect(() => {
+    if (orderId && isPayable) {
+      paymentService.getPaymentIdByOrderId(orderId).then(setPaymentId);
+    }
+  }, [isPayable, orderId]);
+
+  useEffect(() => {
+    console.log(orderStatus);
+  }, [orderStatus]);
 
   return (
     <div className="wrapper grid grid-cols-1 place-items-center py-8">
@@ -58,8 +80,12 @@ const CheckoutPage = () => {
           </li>
         </ul>
 
-        <div className="min-h-[60vh] max-h-[60vh]">
-          <ContactForm />
+        <div className="min-h-[60vh] max-h-[60vh] overflow-auto">
+          {isPayable && paymentId ? (
+            <CheckoutForm paymentId={paymentId} />
+          ) : (
+            <ContactForm />
+          )}
         </div>
       </div>
     </div>

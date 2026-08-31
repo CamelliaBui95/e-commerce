@@ -126,7 +126,7 @@ public class PaymentService {
                                         .setName("Order " + payment.getOrderId()).build())
                                 .build())
                         .build())
-                .setMode(SessionCreateParams.Mode.PAYMENT).setUiMode(SessionCreateParams.UiMode.EMBEDDED_PAGE)
+                .setMode(SessionCreateParams.Mode.PAYMENT).setUiMode(SessionCreateParams.UiMode.FORM)
                 .setReturnUrl(returnUrl).putMetadata(METADATA_PAYMENT_ID, payment.getPublicId().toString())
                 .putMetadata(METADATA_ORDER_ID, payment.getOrderId().toString()).build();
     }

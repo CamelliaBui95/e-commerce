@@ -3,7 +3,10 @@ import type { OrderItem } from "@/models/order";
 
 export const orderSelector = (root: RootState) => root.order.order;
 
-export const orderStatusSelector = (root: RootState) => root.order.order?.status;
+export const orderIdSelector = (root: RootState) => root.order.order?.id;
+
+export const orderStatusSelector = (root: RootState) =>
+  root.order.order?.status;
 
 export const orderItemsSelector = (root: RootState) =>
   root.order.order?.items ?? [];

@@ -32,9 +32,9 @@ public class StripeWebhookService {
     @Value("${stripe.webhook-secret}")
     private String webhookSecret;
 
-    private PaymentCRUDService paymentCRUDService;
+    private final PaymentCRUDService paymentCRUDService;
 
-    private PaymentService paymentService;
+    private final PaymentService paymentService;
 
     public void handle(String payload, String signature) throws SignatureVerificationException {
         Event event = Webhook.constructEvent(payload, signature, webhookSecret);
