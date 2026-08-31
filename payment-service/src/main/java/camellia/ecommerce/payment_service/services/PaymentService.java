@@ -14,6 +14,7 @@ import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
 
 import camellia.ecommerce.payment_service.entities.Payment;
+import camellia.ecommerce.payment_service.enums.PaymentStatus;
 import camellia.ecommerce.payment_service.kafka.Topic;
 import camellia.ecommerce.payment_service.kafka.events.InventoryEvent;
 import camellia.ecommerce.payment_service.kafka.events.PaymentEvent;
@@ -52,6 +53,28 @@ public class PaymentService {
 
         Payment payment = paymentCRUDService.create(event.orderId(), new BigDecimal(event.totalPrice()));
         publish(Topic.PAYMENT_PENDING, payment);
+    }
+
+    public void updatePaymentStatus(Payment payment, PaymentStatus status) {
+        PaymentStatus currentStatus = payment.getStatus();
+
+        if (currentStatus == status) {
+            log.info("Payment {} is already {}, nothing to do", payment.getPublicId(), status);
+            return;
+        }
+
+        if (currentStatus == PaymentStatus.SUCCEEDED || currentStatus == PaymentStatus.FAILED) {
+            log.warn("Ignoring {} for payment {} already saved as {}", status, payment.getPublicId(), currentStatus);
+            return;
+        }
+
+        Payment updatedPayment = paymentCRUDService.updateStatus(payment, status);
+
+        switch (status) {
+        case PaymentStatus.SUCCEEDED -> publish(Topic.PAYMENT_SUCCEEDED, updatedPayment);
+        case PaymentStatus.FAILED -> publish(Topic.PAYMENT_FAILED, updatedPayment);
+        default -> log.info("Payment {} moved to {}", updatedPayment.getPublicId(), status);
+        }
     }
 
     public void publish(Topic topic, Payment payment) {
