@@ -11,6 +11,11 @@ import camellia.ecommerce.payment_service.kafka.Topic;
 public class KafkaTopicConfig {
 
     @Bean
+    public NewTopic paymentPendingTopic() {
+        return createTopic(Topic.PAYMENT_PENDING);
+    }
+
+    @Bean
     public NewTopic paymentSucceededTopic() {
         return createTopic(Topic.PAYMENT_SUCCEEDED);
     }

@@ -14,6 +14,7 @@ import camellia.ecommerce.order_service.enums.OrderStatus;
 import camellia.ecommerce.order_service.kafka.Topic;
 import camellia.ecommerce.order_service.kafka.events.InventoryEvent;
 import camellia.ecommerce.order_service.kafka.events.OrderEvent;
+import camellia.ecommerce.order_service.kafka.events.PaymentEvent;
 import camellia.ecommerce.order_service.mappers.OrderMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -66,14 +67,27 @@ public class OrderService {
     public void handleInventoryReservedEvent(InventoryEvent inventoryEvent) {
         UUID orderId = inventoryEvent.orderId();
 
-        Order order = orderCRUDService.findByPublicId(orderId);
+        Order order = findOrder(orderId);
 
-        OrderStatus status = OrderStatus.PAYMENT_PENDING;
+        OrderStatus status = OrderStatus.INVENTORY_RESERVED;
         order.setStatus(status);
 
         order.getItems().stream().forEach(item -> {
             item.setStatus(OrderItemStatus.AVAILABLE);
         });
+
+        orderCRUDService.save(order);
+        orderSSEService.sendStatus(orderId, status);
+    }
+
+    @KafkaListener(topics = "PAYMENT_PENDING", containerFactory = "paymentEventKafkaListenerContainerFactory")
+    public void handlePaymentPendingEvent(PaymentEvent event) {
+        UUID orderId = event.orderId();
+
+        Order order = findOrder(orderId);
+
+        OrderStatus status = OrderStatus.PAYMENT_PENDING;
+        order.setStatus(status);
 
         orderCRUDService.save(order);
         orderSSEService.sendStatus(orderId, status);

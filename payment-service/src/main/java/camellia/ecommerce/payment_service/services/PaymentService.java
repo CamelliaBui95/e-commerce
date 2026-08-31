@@ -6,7 +6,11 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import camellia.ecommerce.payment_service.entities.Payment;
+import camellia.ecommerce.payment_service.kafka.Topic;
 import camellia.ecommerce.payment_service.kafka.events.InventoryEvent;
+import camellia.ecommerce.payment_service.kafka.events.PaymentEvent;
+import camellia.ecommerce.payment_service.mappers.PaymentMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,8 +23,18 @@ public class PaymentService {
 
     private final PaymentCRUDService paymentCRUDService;
 
+    private final PaymentMapper paymentMapper;
+
     @KafkaListener(topics = "INVENTORY_RESERVED", containerFactory = "inventoryEventKafkaListenerContainerFactory")
     public void handleInventoryReservedEvent(InventoryEvent event) {
-        paymentCRUDService.create(event.orderId(), new BigDecimal(event.totalPrice()));
+        Payment payment = paymentCRUDService.create(event.orderId(), new BigDecimal(event.totalPrice()));
+        publishPaymentPendingEvent(payment);
+    }
+
+    public void publishPaymentPendingEvent(Payment payment) {
+        PaymentEvent event = paymentMapper.toEvent(payment);
+
+        kafkaTemplate.send(Topic.PAYMENT_PENDING.name(), event.paymentId().toString(), event);
+        log.info("Published PAYMENT_PENDING event: " + event);
     }
 }
