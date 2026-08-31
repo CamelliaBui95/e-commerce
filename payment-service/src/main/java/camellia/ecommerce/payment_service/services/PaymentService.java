@@ -44,6 +44,9 @@ public class PaymentService {
     @Value("${stripe.currency}")
     private String currency;
 
+    @Value("${stripe.return-url}")
+    private String returnUrl;
+
     @KafkaListener(topics = "INVENTORY_RESERVED", containerFactory = "inventoryEventKafkaListenerContainerFactory")
     public void handleInventoryReservedEvent(InventoryEvent event) {
         if (paymentCRUDService.existsForOrder(event.orderId())) {
@@ -117,14 +120,14 @@ public class PaymentService {
     private SessionCreateParams buildSessionParams(Payment payment) {
         return SessionCreateParams.builder()
                 .addLineItem(SessionCreateParams.LineItem.builder().setQuantity(1L)
-                        .setPriceData(SessionCreateParams.LineItem.PriceData.builder().setCurrency("euro")
+                        .setPriceData(SessionCreateParams.LineItem.PriceData.builder().setCurrency(currency)
                                 .setUnitAmount(toMinorUnits(payment.getAmount()))
                                 .setProductData(SessionCreateParams.LineItem.PriceData.ProductData.builder()
                                         .setName("Order " + payment.getOrderId()).build())
                                 .build())
                         .build())
                 .setMode(SessionCreateParams.Mode.PAYMENT).setUiMode(SessionCreateParams.UiMode.EMBEDDED_PAGE)
-                .setReturnUrl("").putMetadata(METADATA_PAYMENT_ID, payment.getPublicId().toString())
+                .setReturnUrl(returnUrl).putMetadata(METADATA_PAYMENT_ID, payment.getPublicId().toString())
                 .putMetadata(METADATA_ORDER_ID, payment.getOrderId().toString()).build();
     }
 
