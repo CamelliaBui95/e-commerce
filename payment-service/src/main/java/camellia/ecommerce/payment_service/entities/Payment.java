@@ -43,6 +43,8 @@ public class Payment {
 
     private String stripePaymentIntentId;
 
+    private String stripePaymentSessionId;
+
     private ZonedDateTime createdAt;
 
     private ZonedDateTime processedAt;
