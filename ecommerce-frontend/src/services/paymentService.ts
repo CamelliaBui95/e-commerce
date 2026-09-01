@@ -1,5 +1,5 @@
 import { paymentApi } from "@/api/api";
-import type { PaymentSessionRes } from "@/models/payment";
+import type { Payment, PaymentSessionRes } from "@/models/payment";
 import type { UUID } from "@/models/uuid";
 import axios from "axios";
 
@@ -10,6 +10,22 @@ const getPaymentIdByOrderId = async (orderId: UUID): Promise<UUID | null> => {
     const res = await paymentApi.get<UUID>(PAYMENTS_PREFIX, {
       params: { order_id: orderId },
     });
+    return res.data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.status === 404) {
+      return null;
+    }
+    throw error;
+  }
+};
+
+const getPaymentBySessionId = async (
+  sessionId: string
+): Promise<Payment | null> => {
+  try {
+    const res = await paymentApi.get<Payment>(
+      `${PAYMENTS_PREFIX}/sessions/${sessionId}`
+    );
     return res.data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response?.status === 404) {
@@ -34,6 +50,7 @@ const getURL = () => {
 
 export default {
   getPaymentIdByOrderId,
+  getPaymentBySessionId,
   createPaymentSession,
   getURL,
 };

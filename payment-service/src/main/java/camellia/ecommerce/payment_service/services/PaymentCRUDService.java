@@ -42,6 +42,10 @@ public class PaymentCRUDService {
         return paymentRepository.findByOrderId(orderId);
     }
 
+    public Optional<Payment> findByStripeSessionId(String sessionId) {
+        return paymentRepository.findByStripePaymentSessionId(sessionId);
+    }
+
     public boolean existsForOrder(UUID orderId) {
         return paymentRepository.existsByOrderId(orderId);
     }

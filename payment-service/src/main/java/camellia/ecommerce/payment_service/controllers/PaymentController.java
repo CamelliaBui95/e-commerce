@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.stripe.model.checkout.Session;
 
+import camellia.ecommerce.payment_service.dtos.PaymentDto;
 import camellia.ecommerce.payment_service.dtos.PaymentSessionRes;
 import camellia.ecommerce.payment_service.entities.Payment;
+import camellia.ecommerce.payment_service.mappers.PaymentMapper;
 import camellia.ecommerce.payment_service.services.PaymentCRUDService;
 import camellia.ecommerce.payment_service.services.PaymentService;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,8 @@ public class PaymentController {
 
     private final PaymentCRUDService paymentCRUDService;
 
+    private final PaymentMapper paymentMapper;
+
     @GetMapping
     public ResponseEntity<UUID> findPaymentId(@RequestParam("order_id") UUID orderId) {
         Optional<Payment> paymentOpt = paymentCRUDService.findByOrderId(orderId);
@@ -36,6 +40,17 @@ public class PaymentController {
         }
 
         return ResponseEntity.ok(paymentOpt.get().getPublicId());
+    }
+
+    @GetMapping("/sessions/{sessionId}")
+    public ResponseEntity<PaymentDto> findPaymentBySessionId(@PathVariable String sessionId) {
+        Optional<Payment> paymentOpt = paymentCRUDService.findByStripeSessionId(sessionId);
+
+        if (paymentOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(paymentMapper.toDto(paymentOpt.get()));
     }
 
     @GetMapping("/{paymentId}/session")

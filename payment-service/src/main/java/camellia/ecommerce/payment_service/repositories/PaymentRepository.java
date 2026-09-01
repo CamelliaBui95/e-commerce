@@ -14,5 +14,8 @@ public interface PaymentRepository extends JpaRepository<Payment, Long>, JpaSpec
 
     Optional<Payment> findByOrderId(UUID orderId);
 
+    Optional<Payment> findByStripePaymentSessionId(String stripePaymentSessionId);
+
     boolean existsByOrderId(UUID orderId);
+
 }
