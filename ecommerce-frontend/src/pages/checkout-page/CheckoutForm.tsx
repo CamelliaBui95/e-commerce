@@ -9,6 +9,7 @@ import type { StripeCheckoutFormConfirmEvent } from "@stripe/stripe-js";
 
 import paymentService from "@/services/paymentService";
 import type { UUID } from "@/models/uuid";
+import type { Client } from "@/models/client";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
@@ -42,9 +43,10 @@ const PaymentForm = () => {
 
 interface CheckoutFormProps {
   paymentId: UUID;
+  client: Client;
 }
 
-const CheckoutForm: React.FC<CheckoutFormProps> = ({ paymentId }) => {
+const CheckoutForm: React.FC<CheckoutFormProps> = ({ paymentId, client }) => {
   const clientSecret = useMemo(
     () =>
       paymentService
@@ -53,8 +55,18 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ paymentId }) => {
     [paymentId]
   );
 
+  if (!paymentId || !client) return <></>;
+
   return (
-    <CheckoutFormProvider stripe={stripePromise} options={{ clientSecret }}>
+    <CheckoutFormProvider
+      stripe={stripePromise}
+      options={{
+        clientSecret,
+        defaultValues: {
+          email: client.email,
+        },
+      }}
+    >
       <PaymentForm />
     </CheckoutFormProvider>
   );

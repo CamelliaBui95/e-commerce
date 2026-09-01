@@ -24,3 +24,5 @@ export const orderTotalSelector = (root: RootState) =>
       0
     )
     .toFixed(2);
+
+export const clientSelector = (root: RootState) => root.order.order?.client;

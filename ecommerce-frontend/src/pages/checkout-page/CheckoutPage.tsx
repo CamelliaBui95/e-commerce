@@ -6,9 +6,9 @@ import {
 import CartItems from "@/features/cart/component/CartItems";
 import OrderItems from "@/features/order/component/OrderItems";
 import {
+  clientSelector,
   orderIdSelector,
   orderItemsCountSelector,
-  orderStatusSelector,
   orderTotalSelector,
 } from "@/features/order/orderSelector";
 import ContactForm from "./ContactForm";
@@ -16,7 +16,7 @@ import { useSelector } from "react-redux";
 import CheckoutForm from "./CheckoutForm";
 import { useOrderStatus } from "@/hooks/useOrderStatus";
 import paymentService from "@/services/paymentService";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import type { UUID } from "@/models/uuid";
 
 const PAYMENT_STEP_STATUSES: OrderStatus[] = [
@@ -47,6 +47,7 @@ const CheckoutPage = () => {
   const orderId = useSelector(orderIdSelector);
   const orderItemCount = useSelector(orderItemsCountSelector);
   const orderTotal = useSelector(orderTotalSelector);
+  const client = useSelector(clientSelector);
 
   const itemCount = isPaymentStep ? orderItemCount : cartItemCount;
   const total = isPaymentStep ? orderTotal : cartTotal;
@@ -82,7 +83,7 @@ const CheckoutPage = () => {
 
         <div className="min-h-[60vh] max-h-[60vh] overflow-auto">
           {isPayable && paymentId ? (
-            <CheckoutForm paymentId={paymentId} />
+            <CheckoutForm paymentId={paymentId} client={client} />
           ) : (
             <ContactForm />
           )}
