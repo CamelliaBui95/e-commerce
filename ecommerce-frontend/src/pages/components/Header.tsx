@@ -75,13 +75,19 @@ const Header = () => {
               </NavigationMenuLink>
             </NavigationMenuItem>
 
-            <NavigationMenuItem>
+            {/* <NavigationMenuItem>
               <NavigationMenuTrigger>Categories</NavigationMenuTrigger>
               <NavigationMenuContent>
                 <NavigationMenuLink render={<Link to="/products" />}>
                   Link
                 </NavigationMenuLink>
               </NavigationMenuContent>
+            </NavigationMenuItem> */}
+
+            <NavigationMenuItem>
+              <NavigationMenuLink render={<Link to="/products" />}>
+                Products
+              </NavigationMenuLink>
             </NavigationMenuItem>
 
             <NavigationMenuItem>
