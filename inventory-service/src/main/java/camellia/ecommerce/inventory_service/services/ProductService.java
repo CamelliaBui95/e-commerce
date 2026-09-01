@@ -2,6 +2,7 @@ package camellia.ecommerce.inventory_service.services;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.apache.kafka.common.errors.ResourceNotFoundException;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import camellia.ecommerce.inventory_service.dtos.ProductDto;
 import camellia.ecommerce.inventory_service.dtos.ProductSearchQuery;
@@ -56,6 +58,17 @@ public class ProductService {
 
     public Product save(Product product) {
         return productRepository.save(product);
+    }
+
+    @Transactional
+    public void updateStocks(Map<UUID, Long> numberReservedByProductId) {
+        List<Product> products = productRepository.findAllByPublicIdIn(numberReservedByProductId.keySet());
+
+        for (Product product : products) {
+            UUID productId = product.getPublicId();
+            Long newStock = product.getNumberInStock() - numberReservedByProductId.get(productId);
+            product.setNumberInStock(newStock);
+        }
     }
 
 }

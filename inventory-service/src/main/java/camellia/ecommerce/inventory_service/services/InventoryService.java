@@ -1,19 +1,23 @@
 package camellia.ecommerce.inventory_service.services;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import camellia.ecommerce.inventory_service.entities.InventoryReservation;
 import camellia.ecommerce.inventory_service.entities.Product;
 import camellia.ecommerce.inventory_service.enums.ReservationStatus;
 import camellia.ecommerce.inventory_service.kafka.Topic;
 import camellia.ecommerce.inventory_service.kafka.events.InventoryEvent;
 import camellia.ecommerce.inventory_service.kafka.events.OrderEvent;
 import camellia.ecommerce.inventory_service.kafka.events.OrderItemEvent;
+import camellia.ecommerce.inventory_service.kafka.events.PaymentEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -59,6 +63,20 @@ public class InventoryService {
             publishInventoryReservedEvent(orderEvent.publicId(), availableItems, unavailableItems);
         }
 
+    }
+
+    @KafkaListener(topics = "PAYMENT_SUCCEEDED", containerFactory = "paymentEventKafkaListenerContainerFactory")
+    public void handlePaymentSucceededEvent(PaymentEvent paymentEvent) {
+        UUID orderId = paymentEvent.orderId();
+        List<InventoryReservation> inventoryReservations = inventoryReservationService.findByOrderId(orderId);
+        Map<UUID, Long> numberReservedByProductId = new HashMap<>();
+
+        for (InventoryReservation inventoryReservation : inventoryReservations) {
+            numberReservedByProductId.putIfAbsent(inventoryReservation.getProductId(),
+                    inventoryReservation.getQuantity());
+        }
+
+        productService.updateStocks(numberReservedByProductId);
     }
 
     public void publishInventoryReservedEvent(UUID orderId, List<OrderItemEvent> availableItems,

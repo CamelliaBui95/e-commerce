@@ -7,11 +7,15 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
 import camellia.ecommerce.inventory_service.entities.InventoryReservation;
+import java.util.List;
+
 
 public interface InventoryReservationRepository
         extends JpaRepository<InventoryReservation, Long>, JpaSpecificationExecutor<InventoryReservation> {
 
     @Query("SELECT COALESCE(SUM(i.quantity), 0) FROM InventoryReservation i WHERE i.productId = :productId AND i.status = camellia.ecommerce.inventory_service.enums.ReservationStatus.RESERVED")
     int findReservedQuantityOfProduct(UUID productId);
+
+    List<InventoryReservation> findByOrderId(UUID orderId);
 
 }

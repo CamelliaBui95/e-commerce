@@ -19,6 +19,7 @@ import org.springframework.kafka.support.serializer.JacksonJsonDeserializer;
 import org.springframework.kafka.support.serializer.JacksonJsonSerializer;
 
 import camellia.ecommerce.inventory_service.kafka.events.OrderEvent;
+import camellia.ecommerce.inventory_service.kafka.events.PaymentEvent;
 
 @Configuration
 public class KafkaFactoryConfig {
@@ -59,6 +60,29 @@ public class KafkaFactoryConfig {
         var factory = new ConcurrentKafkaListenerContainerFactory<String, OrderEvent>();
 
         factory.setConsumerFactory(orderEventConsumerFactory());
+
+        return factory;
+    }
+
+    @Bean
+    public ConsumerFactory<String, PaymentEvent> paymentEventConsumerFactory() {
+        JacksonJsonDeserializer<PaymentEvent> deserializer = new JacksonJsonDeserializer<>(PaymentEvent.class);
+
+        deserializer.ignoreTypeHeaders();
+
+        Map<String, Object> config = new HashMap<>();
+        config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        config.put(ConsumerConfig.GROUP_ID_CONFIG, "inventory-service");
+        config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+
+        return new DefaultKafkaConsumerFactory<>(config, new StringDeserializer(), deserializer);
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, PaymentEvent> paymentEventKafkaListenerContainerFactory() {
+        var factory = new ConcurrentKafkaListenerContainerFactory<String, PaymentEvent>();
+
+        factory.setConsumerFactory(paymentEventConsumerFactory());
 
         return factory;
     }

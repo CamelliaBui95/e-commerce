@@ -1,5 +1,6 @@
 package camellia.ecommerce.inventory_service.services;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -23,6 +24,10 @@ public class InventoryReservationService {
 
     public long findReservedQuantityOfProduct(UUID productId) {
         return repository.findReservedQuantityOfProduct(productId);
+    }
+
+    public List<InventoryReservation> findByOrderId(UUID orderId) {
+        return repository.findByOrderId(orderId);
     }
 
 }

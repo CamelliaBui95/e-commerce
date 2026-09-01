@@ -82,15 +82,12 @@ public class OrderService {
 
     @KafkaListener(topics = "PAYMENT_PENDING", containerFactory = "paymentEventKafkaListenerContainerFactory")
     public void handlePaymentPendingEvent(PaymentEvent event) {
-        UUID orderId = event.orderId();
+        handlePaymentEvents(event, OrderStatus.PAYMENT_PENDING);
+    }
 
-        Order order = findOrder(orderId);
-
-        OrderStatus status = OrderStatus.PAYMENT_PENDING;
-        order.setStatus(status);
-
-        orderCRUDService.save(order);
-        orderSSEService.sendStatus(orderId, status);
+    @KafkaListener(topics = "PAYMENT_SUCCEEDED", containerFactory = "paymentEventKafkaListenerContainerFactory")
+    public void handlePaymentSucceeded(PaymentEvent event) {
+        handlePaymentEvents(event, OrderStatus.PAYMENT_SUCCEEDED);
     }
 
     public void publishOrderCreatedEvent(Order order) {
@@ -106,6 +103,17 @@ public class OrderService {
 
     public Order findOrder(UUID publicId) {
         return orderCRUDService.findByPublicId(publicId);
+    }
+
+    private void handlePaymentEvents(PaymentEvent event, OrderStatus status) {
+        UUID orderId = event.orderId();
+
+        Order order = findOrder(orderId);
+
+        order.setStatus(status);
+
+        orderCRUDService.save(order);
+        orderSSEService.sendStatus(orderId, status);
     }
 
 }
