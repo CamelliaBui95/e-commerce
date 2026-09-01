@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import camellia.ecommerce.inventory_service.entities.InventoryReservation;
 import camellia.ecommerce.inventory_service.enums.ReservationStatus;
@@ -28,6 +29,11 @@ public class InventoryReservationService {
 
     public List<InventoryReservation> findByOrderId(UUID orderId) {
         return repository.findByOrderId(orderId);
+    }
+
+    @Transactional
+    public int updateReservationStatus(List<Long> reservationIds, ReservationStatus status) {
+        return repository.updateReservationStatus(reservationIds, status);
     }
 
 }

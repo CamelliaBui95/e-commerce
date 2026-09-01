@@ -76,6 +76,9 @@ public class InventoryService {
                     inventoryReservation.getQuantity());
         }
 
+        List<Long> reservationIds = inventoryReservations.stream().map(ir -> ir.getId()).toList();
+
+        inventoryReservationService.updateReservationStatus(reservationIds, ReservationStatus.CONFIRMED);
         productService.updateStocks(numberReservedByProductId);
     }
 
