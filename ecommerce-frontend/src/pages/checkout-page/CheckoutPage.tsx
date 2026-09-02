@@ -66,6 +66,8 @@ const CheckoutPage = () => {
 
   return (
     <div className="wrapper grid grid-cols-1 place-items-center py-8">
+      <h2 className="font-accent font-bold text-2xl mb-10">Checkout</h2>
+
       <div className="grid grid-cols-2 gap-4 min-w-3/4">
         <ul className="border-2 rounded-lg p-4 relative grid grid-rows-12 gap-1 min-h-[60vh] max-h-[60vh]">
           <li className="row-span-1 font-bold z-2 bg-white w-full ">

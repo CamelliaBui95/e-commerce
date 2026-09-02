@@ -91,7 +91,7 @@ const HomePage = () => {
         <div className="w-fit my-6 mx-auto">
           <h2
             id="new-arrivals"
-            className="text-xl text-charcoal text-center font-bold"
+            className="text-2xl text-charcoal text-center font-bold font-accent"
           >
             New Arrivals
           </h2>

@@ -64,8 +64,9 @@ const Products = () => {
   return (
     <div className="flex flex-col justify-center items-center gap-8 p-8">
       <h2 className="text-center text-3xl font-bold font-accent">
-        Discover Our Products
+        Explore Our Products
       </h2>
+
       <ul className="flex flex-row gap-10">
         {CATEGORIES.map((cat) => (
           <li

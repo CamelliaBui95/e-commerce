@@ -6,7 +6,7 @@ const PageLayout = () => {
   return (
     <div>
       <Header />
-      <main className="min-h-screen">
+      <main className="min-h-screen pb-5">
         <Outlet />
       </main>
       <Footer />
