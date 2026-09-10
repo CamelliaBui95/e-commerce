@@ -5,12 +5,17 @@ import { addToCart, decrementItem, removeFromCart } from "../cartSlice";
 import type { OrderItem } from "@/models/order";
 import { cartItemsSelector } from "../cartSelector";
 import { cn } from "@/lib/utils";
+import type { UUID } from "@/models/uuid";
 
 interface CartItemsProps {
   className?: string;
+  unavailableItems?: UUID[];
 }
 
-const CartItems: React.FC<CartItemsProps> = ({ className }) => {
+const CartItems: React.FC<CartItemsProps> = ({
+  className,
+  unavailableItems = [],
+}) => {
   const cartItems = useSelector(cartItemsSelector);
   const dispatch = useDispatch();
 
@@ -25,6 +30,7 @@ const CartItems: React.FC<CartItemsProps> = ({ className }) => {
   const handleRemoveItem = (item: OrderItem) => {
     dispatch(removeFromCart(item));
   };
+
   return (
     <ItemGroup className={cn("gap-4", className)}>
       {cartItems.map((item) => (
@@ -34,6 +40,9 @@ const CartItems: React.FC<CartItemsProps> = ({ className }) => {
           onAdd={() => handleAddItem(item)}
           onDecrement={() => handleDecrementItem(item)}
           onRemove={() => handleRemoveItem(item)}
+          variant={
+            unavailableItems.includes(item.product_id) ? "danger" : "outline"
+          }
         />
       ))}
     </ItemGroup>

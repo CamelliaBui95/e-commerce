@@ -6,11 +6,15 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import camellia.ecommerce.order_service.dtos.OrderDto;
 import camellia.ecommerce.order_service.entities.Order;
+import camellia.ecommerce.order_service.entities.OrderItem;
+import camellia.ecommerce.order_service.enums.OrderItemStatus;
 import camellia.ecommerce.order_service.mappers.OrderMapper;
+import camellia.ecommerce.order_service.services.OrderItemService;
 import camellia.ecommerce.order_service.services.OrderSSEService;
 import camellia.ecommerce.order_service.services.OrderService;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
@@ -30,6 +34,8 @@ public class OrderController {
 
     private final OrderService orderService;
 
+    private final OrderItemService orderItemService;
+
     private final OrderSSEService orderSSEService;
 
     @PostMapping("/create")
@@ -42,11 +48,16 @@ public class OrderController {
 
     @GetMapping(value = "/{orderId}/events", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public ResponseEntity<SseEmitter> subscribe(@PathVariable UUID orderId) {
-        Order order = orderService.findOrder(orderId);
-        
-        SseEmitter emitter = orderSSEService.subscribe(orderId);
 
-        orderSSEService.sendStatus(orderId, order.getStatus());
+        Order order = orderService.findOrder(orderId);
+
+        List<OrderItem> orderItems = order.getItems();
+        List<UUID> unavailableItemIds = orderItemService.findItemsByStatus(orderItems, OrderItemStatus.UNAVAILABLE)
+                .stream().map(item -> item.getPublicId()).toList();
+
+        SseEmitter emitter = orderSSEService.subscribe(orderId);
+        orderSSEService.sendStatusTo(emitter, orderId, order.getStatus(), unavailableItemIds);
+
         return ResponseEntity.ok(emitter);
 
     }

@@ -16,6 +16,7 @@ import { ImageSize } from "@/enums/ImageSize";
 export interface CartItemProps {
   item: OrderItem;
   readOnly?: boolean;
+  variant?: "default" | "outline" | "danger" | "muted";
   onAdd?: () => void;
   onDecrement?: () => void;
   onRemove?: () => void;
@@ -24,12 +25,14 @@ export interface CartItemProps {
 const CartItem: React.FC<CartItemProps> = ({
   item,
   readOnly = false,
+  variant = "outline",
   onAdd,
   onDecrement,
   onRemove,
 }) => {
+  
   return (
-    <Item variant="outline" role="listitem">
+    <Item variant={variant} role="listitem">
       <ItemMedia variant="image" className="h-20 w-16">
         <img
           src={productService.getProductImageUrl(

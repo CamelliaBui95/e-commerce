@@ -53,6 +53,7 @@ const ContactForm = () => {
         dispatch(
           setOrder({
             ...order,
+            items: orderCreated.items,
             id: orderCreated.id,
             status: orderCreated.status,
             client: orderCreated.client,

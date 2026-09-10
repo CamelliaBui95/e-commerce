@@ -25,11 +25,15 @@ public class OrderSSEService {
         emitter.onCompletion(() -> remove(orderId, emitter));
         emitter.onTimeout(() -> remove(orderId, emitter));
         emitter.onError(error -> {
-            log.error(error.toString());
+            log.debug("SSE client disconnected for order {}: {}", orderId, error.toString());
             remove(orderId, emitter);
         });
 
         return emitter;
+    }
+
+    public void sendStatusTo(SseEmitter emitter, UUID orderId, OrderStatus status, List<UUID> unavailableItems) {
+        send(orderId, emitter, new OrderStatusEvent(orderId, status, unavailableItems));
     }
 
     public void sendStatus(UUID orderId, OrderStatus status, List<UUID> unavailableItems) {
@@ -42,10 +46,21 @@ public class OrderSSEService {
         OrderStatusEvent event = new OrderStatusEvent(orderId, status, unavailableItems);
 
         for (SseEmitter emitter : orderEmitters) {
+            send(orderId, emitter, event);
+        }
+    }
+
+    private void send(UUID orderId, SseEmitter emitter, OrderStatusEvent event) {
+        try {
+            emitter.send(SseEmitter.event().name("order-status").data(event));
+        } catch (Exception e) {
+            log.debug("Dropping SSE emitter for order {}: {}", orderId, e.toString());
+            remove(orderId, emitter);
+
             try {
-                emitter.send(SseEmitter.event().name("order-status").data(event));
-            } catch (Exception e) {
-                remove(orderId, emitter);
+                emitter.completeWithError(e);
+            } catch (Exception ignored) {
+                // The connection is already gone, there is nothing left to release
             }
         }
     }

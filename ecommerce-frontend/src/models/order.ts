@@ -19,6 +19,7 @@ export type Order = {
   created_at?: string;
   status?: OrderStatus;
   client?: Client;
+  unavailable_items?: UUID[];
 };
 
 export type OrderStatusEvent = {

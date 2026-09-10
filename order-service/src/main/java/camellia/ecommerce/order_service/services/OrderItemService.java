@@ -1,5 +1,6 @@
 package camellia.ecommerce.order_service.services;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,6 +31,10 @@ public class OrderItemService {
         }).toList();
 
         return orderItemRepository.saveAll(newItems);
+    }
+
+    public List<OrderItem> findItemsByStatus(Collection<OrderItem> items, OrderItemStatus status) {
+        return items.stream().filter(item -> item.getStatus().equals(status)).toList();
     }
 
 }

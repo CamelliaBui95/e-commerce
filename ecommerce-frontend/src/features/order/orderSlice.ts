@@ -5,15 +5,14 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 type OrderState = {
   order: Order | null;
-  unavailable_items: UUID[];
 };
 
 const initialState: OrderState = {
   order: {
     items: [],
     status: null,
+    unavailable_items: [],
   },
-  unavailable_items: [],
 };
 
 export const orderSlice = createSlice({
@@ -27,7 +26,7 @@ export const orderSlice = createSlice({
       state.order.status = action.payload;
     },
     setUnavailableItems: (state, action: PayloadAction<UUID[]>) => {
-      state.unavailable_items = action.payload;
+      state.order.unavailable_items = action.payload;
     },
   },
 });
