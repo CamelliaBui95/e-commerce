@@ -24,4 +24,5 @@ export type Order = {
 export type OrderStatusEvent = {
   order_id: UUID;
   status: OrderStatus;
-}
+  unavailable_items: UUID[];
+};

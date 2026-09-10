@@ -2,7 +2,10 @@ import {
   orderSelector,
   orderStatusSelector,
 } from "@/features/order/orderSelector";
-import { setOrderStatus } from "@/features/order/orderSlice";
+import {
+  setOrderStatus,
+  setUnavailableItems,
+} from "@/features/order/orderSlice";
 import type { OrderStatusEvent } from "@/models/order";
 import orderService from "@/services/orderService";
 import { useEffect, useState } from "react";
@@ -32,12 +35,12 @@ export function useOrderStatus() {
     eventSource.addEventListener("order-status", (event) => {
       const msg = event as MessageEvent;
       const data: OrderStatusEvent = JSON.parse(msg.data);
-
       if (
         data.status !== currentOrderStatus ||
         data.order_id !== currentOrder.id
       ) {
         dispatch(setOrderStatus(data.status));
+        dispatch(setUnavailableItems(data.unavailable_items));
       }
     });
 

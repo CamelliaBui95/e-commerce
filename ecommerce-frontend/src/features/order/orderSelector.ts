@@ -26,3 +26,6 @@ export const orderTotalSelector = (root: RootState) =>
     .toFixed(2);
 
 export const clientSelector = (root: RootState) => root.order.order?.client;
+
+export const unavailableItemsSelector = (root: RootState) =>
+  root.order.unavailable_items;

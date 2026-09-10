@@ -1,5 +1,6 @@
 package camellia.ecommerce.order_service.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -60,7 +61,7 @@ public class OrderService {
         });
 
         orderCRUDService.save(order);
-        orderSSEService.sendStatus(orderPublicId, status);
+        orderSSEService.sendStatus(orderPublicId, status, unavailableItems);
     }
 
     @KafkaListener(topics = "INVENTORY_RESERVED", containerFactory = "inventoryEventKafkaListenerContainerFactory")
@@ -77,7 +78,7 @@ public class OrderService {
         });
 
         orderCRUDService.save(order);
-        orderSSEService.sendStatus(orderId, status);
+        orderSSEService.sendStatus(orderId, status, new ArrayList<>());
     }
 
     @KafkaListener(topics = "PAYMENT_PENDING", containerFactory = "paymentEventKafkaListenerContainerFactory")
@@ -96,7 +97,7 @@ public class OrderService {
         String messageKey = order.getPublicId().toString();
 
         kafkaTemplate.send(Topic.ORDER_CREATED.name(), messageKey, orderEvent);
-        orderSSEService.sendStatus(order.getPublicId(), order.getStatus());
+        orderSSEService.sendStatus(order.getPublicId(), order.getStatus(), new ArrayList<>());
 
         log.info("Published ORDER_CREATED event: " + orderEvent);
     }
@@ -113,7 +114,7 @@ public class OrderService {
         order.setStatus(status);
 
         orderCRUDService.save(order);
-        orderSSEService.sendStatus(orderId, status);
+        orderSSEService.sendStatus(orderId, status, new ArrayList<>());
     }
 
 }

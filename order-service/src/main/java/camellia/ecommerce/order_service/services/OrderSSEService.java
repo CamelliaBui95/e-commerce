@@ -32,14 +32,14 @@ public class OrderSSEService {
         return emitter;
     }
 
-    public void sendStatus(UUID orderId, OrderStatus status) {
+    public void sendStatus(UUID orderId, OrderStatus status, List<UUID> unavailableItems) {
         List<SseEmitter> orderEmitters = emitters.get(orderId);
 
         if (orderEmitters == null) {
             return;
         }
 
-        OrderStatusEvent event = new OrderStatusEvent(orderId, status);
+        OrderStatusEvent event = new OrderStatusEvent(orderId, status, unavailableItems);
 
         for (SseEmitter emitter : orderEmitters) {
             try {
