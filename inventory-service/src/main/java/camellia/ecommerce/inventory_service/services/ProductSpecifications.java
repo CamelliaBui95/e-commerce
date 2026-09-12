@@ -46,7 +46,7 @@ public final class ProductSpecifications {
     }
 
     private static Specification<Product> containsName(String name) {
-        String searchedName = String.format("%", name.toLowerCase(), "%");
+        String searchedName = "%" + name.toLowerCase() + "%";
         return (root, query, cb) -> cb.like(cb.lower(root.get("name")), searchedName);
     }
 

@@ -13,6 +13,14 @@ public enum ProductSortBy {
         return this.sortBy;
     }
 
+    public static ProductSortBy fromValue(String value) {
+        for (ProductSortBy candidate : values()) {
+            if (candidate.sortBy.equalsIgnoreCase(value) || candidate.name().equalsIgnoreCase(value))
+                return candidate;
+        }
+        throw new IllegalArgumentException("Unknown sort by: " + value);
+    }
+
     @Override
     public String toString() {
         return this.sortBy;

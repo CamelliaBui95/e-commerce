@@ -62,6 +62,7 @@ const Products = () => {
   const { data } = useSearchProducts({
     pageNumber: page,
     pageSize: 10,
+    sortBy: sortBy,
     direction: direction,
     category: category === Category.ALL ? null : category,
   });
