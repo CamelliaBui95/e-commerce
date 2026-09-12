@@ -5,4 +5,5 @@ export enum Category {
   HOME = "HOME",
   ACCESSORIES = "ACCESSORIES",
   OTHER = "OTHER",
+  ALL = "ALL",
 }
