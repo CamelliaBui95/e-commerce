@@ -50,10 +50,23 @@ const ContactForm = () => {
     try {
       const orderCreated = await orderService.createOrder(order);
       if (orderCreated) {
+        const items = orderCreated.items.map((item) => {
+          const cartItem = cartItems.find(
+            (ci) => ci.product_id === item.product_id
+          );
+          if (cartItem) {
+            return {
+              ...cartItem,
+              ...item,
+            };
+          }
+          return item;
+        });
+
         dispatch(
           setOrder({
             ...order,
-            items: orderCreated.items,
+            items: items,
             id: orderCreated.id,
             status: orderCreated.status,
             client: orderCreated.client,

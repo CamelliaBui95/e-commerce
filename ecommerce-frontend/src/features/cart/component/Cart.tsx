@@ -41,7 +41,9 @@ const Cart = () => {
         <SheetHeader className="h-full">
           <SheetTitle className="font-bold">{`My Cart (${cartItemCount})`}</SheetTitle>
           <div className="flex w-full max-w-md flex-col gap-1 py-2 h-full">
-            <CartItems className="max-h-8/10 overflow-auto" />
+            <div className="max-h-8/10 min-h-8/10 overflow-auto border rounded-md p-2">
+              <CartItems className="overflow-auto" />
+            </div>
             <ul className="py-2">
               <li className="text-lg font-bold flex flex-row justify-between my-1">
                 <span>Total</span>
