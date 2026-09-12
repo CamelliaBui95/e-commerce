@@ -14,7 +14,7 @@ function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
       role="navigation"
       aria-label="pagination"
       data-slot="pagination"
-      className={cn("flex justify-center", className)}
+      className={cn("flex justify-center items-center", className)}
       {...props}
     />
   );
@@ -27,7 +27,7 @@ function PaginationContent({
   return (
     <ul
       data-slot="pagination-content"
-      className={cn("flex items-center gap-0.5", className)}
+      className={cn("flex items-center justify-center gap-0.5", className)}
       {...props}
     />
   );
@@ -51,7 +51,7 @@ function PaginationButton({
 }: PaginationButtonProps) {
   return (
     <Button
-      variant="outline"
+      variant="basic"
       disabled={!isActive}
       size={size}
       className={cn(className, "cursor-pointer")}
