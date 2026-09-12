@@ -110,8 +110,8 @@ const Products = () => {
           </li>
         ))}
       </ul>
-      <div className="border-2 rounded-md p-8 pt-4 flex flex-col gap-4">
-        <div className="flex flex-row w-full md:flex-row md:items-center md:justify-between">
+      <div className="border-2 rounded-md p-8 pt-4 flex flex-col gap-4 min-w-[90%]">
+        <div className="flex flex-row min-w-full md:flex-row md:items-center md:justify-between">
           <Pagination
             currentPage={page}
             numberOfPages={data?.page.totalPages}
@@ -121,8 +121,6 @@ const Products = () => {
             searchTerm={searchTerm}
             sortBy={sortBy}
             direction={direction}
-            numberOfPages={data?.page.totalPages}
-            currentPage={page}
             onSearchTermChange={setSearchTerm}
             onSortByChange={setSortBy}
             onDirectionChange={setDirection}

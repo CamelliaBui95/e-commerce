@@ -22,11 +22,22 @@ const Pagination: React.FC<PaginationProps> = ({
 }) => {
   const pages = getPages(numberOfPages);
 
+  const onNext = () => {
+    onPageChange(currentPage + 1);
+  };
+
+  const onPrevious = () => {
+    onPageChange(currentPage - 1);
+  };
+
   return (
     <PaginationContainer>
       <PaginationContent>
         <PaginationItem>
-          <PaginationPrevious isActive={numberOfPages > 1 && currentPage > 0} />
+          <PaginationPrevious
+            onClick={onPrevious}
+            isActive={numberOfPages > 1 && currentPage > 0}
+          />
         </PaginationItem>
 
         {pages.map((page) => (
@@ -50,6 +61,7 @@ const Pagination: React.FC<PaginationProps> = ({
 
         <PaginationItem>
           <PaginationNext
+            onClick={onNext}
             isActive={numberOfPages > 1 && currentPage < numberOfPages - 1}
           />
         </PaginationItem>
