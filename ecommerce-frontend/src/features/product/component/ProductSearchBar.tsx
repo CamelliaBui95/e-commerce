@@ -3,7 +3,6 @@ import { Input } from "@/components/ui/input";
 import { ProductSortBy } from "@/enums/productSortBy";
 import { SortDirection } from "@/enums/sortDirection";
 import { cn } from "@/lib/utils";
-import Pagination from "@/pages/components/Pagination";
 import {
   ArrowDownWideNarrow,
   ArrowUpNarrowWide,
@@ -22,12 +21,10 @@ interface ProductSearchBarProps {
   searchTerm?: string;
   sortBy?: ProductSortBy;
   direction?: SortDirection;
-  numberOfPages?: number;
   onSearchTermChange?: (name: string) => void;
   onSubmit?: (name: string) => void;
   onSortByChange?: (sortBy: ProductSortBy) => void;
   onDirectionChange?: (direction: SortDirection) => void;
-  onPageChange?: (page: number) => void;
   className?: string;
 }
 
@@ -35,8 +32,6 @@ const ProductSearchBar: React.FC<ProductSearchBarProps> = ({
   searchTerm = "",
   sortBy = ProductSortBy.CREATED_AT,
   direction = SortDirection.DESC,
-  numberOfPages = 0,
-  onPageChange,
   onSearchTermChange,
   onSubmit,
   onSortByChange,
@@ -52,12 +47,10 @@ const ProductSearchBar: React.FC<ProductSearchBarProps> = ({
         onSubmit?.(searchTerm);
       }}
       className={cn(
-        "flex w-full flex-col gap-4 md:flex-row md:items-center md:justify-between",
+        "flex flex-col gap-4 md:flex-row md:items-center md:justify-between",
         className
       )}
     >
-      <Pagination numberOfPages={numberOfPages} onPageChange={onPageChange} />
-      
       <div className="flex flex-row gap-8">
         <div className="relative w-full md:max-w-sm">
           <Search

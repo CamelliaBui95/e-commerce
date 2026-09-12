@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import Pagination from "./components/Pagination";
 
 const CATEGORIES = [
   {
@@ -56,9 +57,10 @@ const Products = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [sortBy, setSortBy] = useState<ProductSortBy>(ProductSortBy.CREATED_AT);
   const [direction, setDirection] = useState<SortDirection>(SortDirection.DESC);
+  const [page, setPage] = useState<number>(0);
 
   const { data } = useSearchProducts({
-    pageNumber: 0,
+    pageNumber: page,
     pageSize: 10,
     direction: direction,
     category: category === Category.ALL ? null : category,
@@ -78,6 +80,11 @@ const Products = () => {
     dispatch(addToCart(orderItem));
   };
 
+  const handleCategoryChange = (cat: Category) => {
+    setCategory(cat);
+    setPage(0);
+  };
+
   return (
     <div className="flex flex-col justify-center items-center gap-8 p-8">
       <h2 className="text-center text-3xl font-bold font-accent">
@@ -89,7 +96,7 @@ const Products = () => {
           <li
             key={cat.category}
             className=" flex flex-row gap-2 hover:cursor-pointer"
-            onClick={() => setCategory(cat.category)}
+            onClick={() => handleCategoryChange(cat.category)}
           >
             {cat.icon}
             <span
@@ -104,15 +111,23 @@ const Products = () => {
         ))}
       </ul>
       <div className="border-2 rounded-md p-8 pt-4 flex flex-col gap-4">
-        <ProductSearchBar
-          searchTerm={searchTerm}
-          sortBy={sortBy}
-          direction={direction}
-          numberOfPages={data?.page.totalPages}
-          onSearchTermChange={setSearchTerm}
-          onSortByChange={setSortBy}
-          onDirectionChange={setDirection}
-        />
+        <div className="flex flex-row w-full md:flex-row md:items-center md:justify-between">
+          <Pagination
+            currentPage={page}
+            numberOfPages={data?.page.totalPages}
+            onPageChange={(page) => setPage(page)}
+          />
+          <ProductSearchBar
+            searchTerm={searchTerm}
+            sortBy={sortBy}
+            direction={direction}
+            numberOfPages={data?.page.totalPages}
+            currentPage={page}
+            onSearchTermChange={setSearchTerm}
+            onSortByChange={setSortBy}
+            onDirectionChange={setDirection}
+          />
+        </div>
         {data?.content?.length > 0 ? (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {data?.content.map((product) => (
