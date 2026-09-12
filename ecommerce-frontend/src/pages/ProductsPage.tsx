@@ -1,16 +1,30 @@
 import { Category } from "@/enums/category";
 import { SortDirection } from "@/enums/sortDirection";
 import { addToCart } from "@/features/cart/cartSlice";
-import ProductCard from "@/features/product/ProductCard";
+import { ProductSortBy } from "@/enums/productSortBy";
+import ProductCard from "@/features/product/component/ProductCard";
+import ProductSearchBar from "@/features/product/component/ProductSearchBar";
 import { useSearchProducts } from "@/hooks/useProducts";
 import { cn } from "@/lib/utils";
 import type { OrderItem } from "@/models/order";
 import type { Product } from "@/models/product";
-import { Cable, Ellipsis, Handbag, Lamp, Shapes, Shirt } from "lucide-react";
+import {
+  Cable,
+  Ellipsis,
+  Handbag,
+  Lamp,
+  LayoutGrid,
+  Shapes,
+  Shirt,
+} from "lucide-react";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 
 const CATEGORIES = [
+  {
+    category: Category.ALL,
+    icon: <LayoutGrid strokeWidth={1} />,
+  },
   {
     category: Category.HOME,
     icon: <Lamp strokeWidth={1} />,
@@ -39,12 +53,15 @@ const CATEGORIES = [
 
 const Products = () => {
   const [category, setCategory] = useState<Category>(null);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [sortBy, setSortBy] = useState<ProductSortBy>(ProductSortBy.CREATED_AT);
+  const [direction, setDirection] = useState<SortDirection>(SortDirection.DESC);
 
   const { data } = useSearchProducts({
     pageNumber: 0,
     pageSize: 10,
-    direction: SortDirection.DESC,
-    category: category,
+    direction: direction,
+    category: category === Category.ALL ? null : category,
   });
 
   const dispatch = useDispatch();
@@ -86,23 +103,33 @@ const Products = () => {
           </li>
         ))}
       </ul>
-
-      {data?.content?.length > 0 ? (
-        <div className="border-2 rounded-md p-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {data?.content.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              currency="euro"
-              onAddToCart={handleAddToCart}
-            />
-          ))}
-        </div>
-      ) : (
-        <div>
-          <h3 className="text-xl">Nothing yet...</h3>
-        </div>
-      )}
+      <div className="border-2 rounded-md p-8 pt-4 flex flex-col gap-4">
+        <ProductSearchBar
+          searchTerm={searchTerm}
+          sortBy={sortBy}
+          direction={direction}
+          numberOfPages={data?.page.totalPages}
+          onSearchTermChange={setSearchTerm}
+          onSortByChange={setSortBy}
+          onDirectionChange={setDirection}
+        />
+        {data?.content?.length > 0 ? (
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {data?.content.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                currency="euro"
+                onAddToCart={handleAddToCart}
+              />
+            ))}
+          </div>
+        ) : (
+          <div>
+            <h3 className="text-xl">Nothing yet...</h3>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

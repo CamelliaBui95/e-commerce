@@ -44,14 +44,15 @@ type PaginationButtonProps = {
 
 function PaginationButton({
   className,
-  isActive,
+  isActive = true,
   size = "icon",
   children,
   ...props
 }: PaginationButtonProps) {
   return (
     <Button
-      variant={isActive ? "outline" : "ghost"}
+      variant="outline"
+      disabled={!isActive}
       size={size}
       className={cn(className, "cursor-pointer")}
       nativeButton={true}
@@ -123,7 +124,7 @@ export {
   PaginationContent,
   PaginationEllipsis,
   PaginationItem,
-  PaginationButton as PaginationLink,
+  PaginationButton,
   PaginationNext,
   PaginationPrevious,
 };
