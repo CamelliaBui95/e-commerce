@@ -1,12 +1,11 @@
 package camellia.ecommerce.order_service.configuration;
 
-import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.springframework.boot.kafka.autoconfigure.KafkaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
@@ -24,13 +23,18 @@ import camellia.ecommerce.order_service.kafka.events.PaymentEvent;
 @Configuration
 public class KafkaFactoryConfig {
 
+    private final KafkaProperties kafkaProperties;
+
+    public KafkaFactoryConfig(KafkaProperties kafkaProperties) {
+        this.kafkaProperties = kafkaProperties;
+    }
+
     @Bean
     public ProducerFactory<String, Object> producerFactory() {
         JacksonJsonSerializer<Object> serializer = new JacksonJsonSerializer<>();
         serializer.setAddTypeInfo(false);
 
-        Map<String, Object> config = new HashMap<>();
-        config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        Map<String, Object> config = kafkaProperties.buildProducerProperties();
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
 
         return new DefaultKafkaProducerFactory<>(config, new StringSerializer(), serializer);
@@ -47,10 +51,7 @@ public class KafkaFactoryConfig {
 
         deserializer.ignoreTypeHeaders();
 
-        Map<String, Object> config = new HashMap<>();
-        config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        config.put(ConsumerConfig.GROUP_ID_CONFIG, "order-service");
-        config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        Map<String, Object> config = kafkaProperties.buildConsumerProperties();
 
         return new DefaultKafkaConsumerFactory<>(config, new StringDeserializer(), deserializer);
     }
@@ -70,10 +71,7 @@ public class KafkaFactoryConfig {
 
         deserializer.ignoreTypeHeaders();
 
-        Map<String, Object> config = new HashMap<>();
-        config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        config.put(ConsumerConfig.GROUP_ID_CONFIG, "order-service");
-        config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        Map<String, Object> config = kafkaProperties.buildConsumerProperties();
 
         return new DefaultKafkaConsumerFactory<>(config, new StringDeserializer(), deserializer);
     }
