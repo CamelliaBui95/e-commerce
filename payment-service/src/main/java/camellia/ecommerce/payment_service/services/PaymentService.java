@@ -2,6 +2,8 @@ package camellia.ecommerce.payment_service.services;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.Duration;
+import java.time.Instant;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -127,7 +129,8 @@ public class PaymentService {
                                 .build())
                         .build())
                 .setMode(SessionCreateParams.Mode.PAYMENT).setUiMode(SessionCreateParams.UiMode.FORM)
-                .setReturnUrl(returnUrl).putMetadata(METADATA_PAYMENT_ID, payment.getPublicId().toString())
+                .setExpiresAt(Instant.now().plus(Duration.ofMinutes(30)).getEpochSecond()).setReturnUrl(returnUrl)
+                .putMetadata(METADATA_PAYMENT_ID, payment.getPublicId().toString())
                 .putMetadata(METADATA_ORDER_ID, payment.getOrderId().toString()).build();
     }
 
