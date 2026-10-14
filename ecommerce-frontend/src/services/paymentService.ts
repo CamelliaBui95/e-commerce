@@ -4,6 +4,7 @@ import type { UUID } from "@/models/uuid";
 import axios from "axios";
 
 const PAYMENTS_PREFIX = "/payments";
+const CONFIGURATION_PREFIX = "/configuration";
 
 const getPaymentIdByOrderId = async (orderId: UUID): Promise<UUID | null> => {
   try {
@@ -48,9 +49,17 @@ const getURL = () => {
   return paymentApi.defaults.baseURL + PAYMENTS_PREFIX;
 };
 
+const getPaymentMode = async (): Promise<string> => {
+  const res = await paymentApi.get<string>(
+    `${CONFIGURATION_PREFIX}/payment-mode`
+  );
+  return res.data;
+};
+
 export default {
   getPaymentIdByOrderId,
   getPaymentBySessionId,
   createPaymentSession,
   getURL,
+  getPaymentMode,
 };

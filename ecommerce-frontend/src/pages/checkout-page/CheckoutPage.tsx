@@ -34,7 +34,7 @@ const ORDER_PENDING_STATUSES: OrderStatus[] = [
 ];
 
 const CheckoutPage = () => {
-  const { connected, status: orderStatus } = useOrderStatus();
+  const { status: orderStatus } = useOrderStatus();
 
   const isPaymentStep =
     !!orderStatus && PAYMENT_STEP_STATUSES.includes(orderStatus);

@@ -6,8 +6,20 @@ import Product from "./pages/ProductPage";
 import PageLayout from "./pages/PageLayout";
 import CheckoutPage from "./pages/checkout-page/CheckoutPage";
 import CheckoutReturnPage from "./pages/checkout-page/CheckoutReturnPage";
+import { useEffect } from "react";
+import paymentService from "./services/paymentService";
+import { useDispatch } from "react-redux";
+import { setPaymentMode } from "./app-configuration/configurationSlice";
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    paymentService
+      .getPaymentMode()
+      .then((paymentMode) => dispatch(setPaymentMode(paymentMode)));
+  }, [dispatch]);
+
   return (
     <Routes>
       <Route element={<PageLayout />}>
