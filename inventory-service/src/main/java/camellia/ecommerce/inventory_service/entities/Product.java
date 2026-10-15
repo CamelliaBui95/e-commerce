@@ -34,10 +34,10 @@ public class Product {
     private String name;
 
     @Column(nullable = false)
-    private Long numberInStock = 0L;
+    private Long numberInStock;
 
     @Column(nullable = false)
-    private Double price = 0.0;
+    private Double price;
 
     @Column(nullable = false, columnDefinition = "varchar(50)")
     @Enumerated(EnumType.STRING)

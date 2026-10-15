@@ -33,10 +33,10 @@ public class OrderItem {
     private UUID productId;
 
     @Column(nullable = false)
-    private Integer quantity = 0;
+    private Integer quantity;
 
     @Column(nullable = false)
-    private Double unitPrice = 0.0;
+    private Double unitPrice;
 
     @Column(nullable = false, columnDefinition = "varchar(50)")
     @Enumerated(EnumType.STRING)
