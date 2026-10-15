@@ -33,7 +33,7 @@ public class PaymentService {
 
     public static final String METADATA_PAYMENT_ID = "paymentId";
 
-    private final String OPEN_SESSION_STATUS = "open";
+    private static final String OPEN_SESSION_STATUS = "open";
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
 

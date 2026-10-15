@@ -24,10 +24,10 @@ import lombok.extern.slf4j.Slf4j;
 public class StripeWebhookService {
 
     private static final String PAYMENT_STATUS_PAID = "paid";
-    private final String STRIPE_PAYMENT_FAILED = "checkout.session.async_payment_failed";
-    private final String STRIPE_PAYMENT_SUCCEEDED = "checkout.session.async_payment_succeeded";
-    private final String STRIPE_PAYMENT_EXPIRED = "checkout.session.expired";
-    private final String STRIPE_PAYMENT_COMPLETED = "checkout.session.completed";
+    private static final String STRIPE_PAYMENT_FAILED = "checkout.session.async_payment_failed";
+    private static final String STRIPE_PAYMENT_SUCCEEDED = "checkout.session.async_payment_succeeded";
+    private static final String STRIPE_PAYMENT_EXPIRED = "checkout.session.expired";
+    private static final String STRIPE_PAYMENT_COMPLETED = "checkout.session.completed";
 
     @Value("${stripe.webhook-secret}")
     private String webhookSecret;
