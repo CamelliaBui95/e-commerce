@@ -1,7 +1,7 @@
 import { PaymentStatus } from "@/enums/paymentStatus";
 import { usePaymentStatus } from "@/hooks/usePaymentStatus";
 import { CheckCircle2Icon, CircleX, LoaderCircle } from "lucide-react";
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { useSearchParams } from "react-router";
 
 const CheckoutReturnPage = () => {
@@ -11,7 +11,6 @@ const CheckoutReturnPage = () => {
   const { payment } = usePaymentStatus(sessionId);
 
   const msg = useMemo(() => {
-    console.log(payment);
     if (!payment || payment.status === PaymentStatus.PROCESSING) {
       return (
         <>

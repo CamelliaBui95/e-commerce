@@ -14,3 +14,8 @@ export type Payment = {
   created_at: string;
   processed_at: string;
 };
+
+export type MockPaymentReq = {
+  payment_id: UUID;
+  status: PaymentStatus;
+};

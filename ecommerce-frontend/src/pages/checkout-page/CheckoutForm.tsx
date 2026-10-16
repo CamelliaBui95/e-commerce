@@ -10,6 +10,9 @@ import type { StripeCheckoutFormConfirmEvent } from "@stripe/stripe-js";
 import paymentService from "@/services/paymentService";
 import type { UUID } from "@/models/uuid";
 import type { Client } from "@/models/client";
+import { useSelector } from "react-redux";
+import { paymentModeSelector } from "@/app-configuration/configurationSelector";
+import MockPaymentForm from "./MockPaymentForm";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
@@ -47,6 +50,8 @@ interface CheckoutFormProps {
 }
 
 const CheckoutForm: React.FC<CheckoutFormProps> = ({ paymentId, client }) => {
+  const paymentMode = useSelector(paymentModeSelector);
+
   const clientSecret = useMemo(
     () =>
       paymentService
@@ -56,6 +61,8 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ paymentId, client }) => {
   );
 
   if (!paymentId || !client) return <></>;
+
+  if (paymentMode === "mock") return <MockPaymentForm />;
 
   return (
     <CheckoutFormProvider

@@ -25,7 +25,6 @@ const supportLinks = [
   { label: "FAQ", to: "/" },
 ];
 
-/* lucide dropped its brand icons, so the social marks are inlined */
 const BrandIcon = ({ path }: { path: string }) => (
   <svg
     viewBox="0 0 24 24"

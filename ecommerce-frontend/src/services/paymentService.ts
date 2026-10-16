@@ -1,5 +1,9 @@
 import { paymentApi } from "@/api/api";
-import type { Payment, PaymentSessionRes } from "@/models/payment";
+import type {
+  MockPaymentReq,
+  Payment,
+  PaymentSessionRes,
+} from "@/models/payment";
 import type { UUID } from "@/models/uuid";
 import axios from "axios";
 
@@ -56,10 +60,20 @@ const getPaymentMode = async (): Promise<string> => {
   return res.data;
 };
 
+const updateMockPayment = async (
+  paymentUpdateReq: MockPaymentReq
+): Promise<void> => {
+  await paymentApi.put<void>(
+    `${PAYMENTS_PREFIX}/mock/update-payment`,
+    paymentUpdateReq
+  );
+};
+
 export default {
   getPaymentIdByOrderId,
   getPaymentBySessionId,
   createPaymentSession,
   getURL,
   getPaymentMode,
+  updateMockPayment,
 };
