@@ -14,7 +14,7 @@ import com.stripe.model.checkout.Session;
 
 import camellia.ecommerce.payment_service.dtos.PaymentDto;
 import camellia.ecommerce.payment_service.dtos.PaymentSessionRes;
-import camellia.ecommerce.payment_service.dtos.PaymentUpdateStatusReq;
+import camellia.ecommerce.payment_service.dtos.MockPaymentReq;
 import camellia.ecommerce.payment_service.entities.Payment;
 import camellia.ecommerce.payment_service.mappers.PaymentMapper;
 import camellia.ecommerce.payment_service.services.PaymentCRUDService;
@@ -70,11 +70,11 @@ public class PaymentController {
         }
     }
 
-    @PutMapping("/update-status")
-    public ResponseEntity<Void> updatePaymentStatus(@Valid @RequestBody PaymentUpdateStatusReq paymentUpdateStatusReq) {
+    @PutMapping("/mock/update-payment")
+    public ResponseEntity<Void> updateMockPayment(@Valid @RequestBody MockPaymentReq mockPaymentReq) {
         try {
-            Payment payment = paymentCRUDService.findByPublicId(paymentUpdateStatusReq.paymentId());
-            paymentService.updatePaymentStatus(payment, paymentUpdateStatusReq.status());
+            Payment payment = paymentCRUDService.findByPublicId(mockPaymentReq.paymentId());
+            paymentService.updateMockPayment(payment, mockPaymentReq);
             return ResponseEntity.ok().build();
         } catch (EntityNotFoundException e) {
             return ResponseEntity.internalServerError().build();

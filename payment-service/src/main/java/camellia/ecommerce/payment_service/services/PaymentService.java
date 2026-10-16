@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -15,6 +16,7 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
 
+import camellia.ecommerce.payment_service.dtos.MockPaymentReq;
 import camellia.ecommerce.payment_service.entities.Payment;
 import camellia.ecommerce.payment_service.enums.PaymentStatus;
 import camellia.ecommerce.payment_service.kafka.Topic;
@@ -80,6 +82,13 @@ public class PaymentService {
         case PaymentStatus.FAILED -> publish(Topic.PAYMENT_FAILED, updatedPayment);
         default -> log.info("Payment {} moved to {}", updatedPayment.getPublicId(), status);
         }
+    }
+
+    public void updateMockPayment(Payment payment, MockPaymentReq mockPaymentReq) {
+        String mockSessionId = String.format("mock-%s", UUID.randomUUID().toString());
+        payment.setStripePaymentSessionId(mockSessionId);
+        paymentCRUDService.save(payment);
+        this.updatePaymentStatus(payment, mockPaymentReq.status());
     }
 
     public void publish(Topic topic, Payment payment) {

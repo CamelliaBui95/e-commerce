@@ -9,7 +9,5 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
 @Valid
-public record PaymentUpdateStatusReq(@NotNull @JsonProperty("payment_id") UUID paymentId,
-        @NotNull PaymentStatus status) {
-
+public record MockPaymentReq(@NotNull @JsonProperty("payment_id") UUID paymentId, @NotNull PaymentStatus status) {
 }
