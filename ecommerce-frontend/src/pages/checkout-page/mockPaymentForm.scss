@@ -1,7 +1,8 @@
 .mock-payment-progression {
     width: 100%;
-    height: 3px;
-    border-top: 5px dotted var(--dark-brown);
+    height: 5px;
+    background: linear-gradient(to right, var(--light-orange), var(--caramel-leather), var(--dark-brown));
+    mask: radial-gradient(circle 2.5px at center, #000 90%, transparent 100%) left center / 10px 5px repeat-x;
     animation: mock-payment-progression 3s infinite;
 
 }

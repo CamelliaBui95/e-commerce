@@ -33,7 +33,7 @@ const MockPaymentForm = () => {
           <CreditCardReader
             size={75}
             strokeWidth={1}
-            className="stroke-dark-brown animate-[bounce_2s_linear_infinite]"
+            className="animate-[bounce_2s_linear_infinite]"
           />
 
           <div className="w-80 px-3">
@@ -42,27 +42,17 @@ const MockPaymentForm = () => {
 
           <div className="card-carousel">
             <div className="card-group">
-              <CreditCardCheck
-                size={75}
-                strokeWidth={1}
-                className="stroke-dark-brown"
-              />
+              <CreditCardCheck size={75} strokeWidth={1} />
               <CreditCardX
                 size={75}
                 strokeWidth={1}
-                className="stroke-dark-brown"
               />
             </div>
             <div aria-hidden className="card-group">
-              <CreditCardCheck
-                size={75}
-                strokeWidth={1}
-                className="stroke-dark-brown"
-              />
+              <CreditCardCheck size={75} strokeWidth={1} />
               <CreditCardX
                 size={75}
                 strokeWidth={1}
-                className="stroke-dark-brown"
               />
             </div>
           </div>
@@ -114,12 +104,19 @@ const CreditCardReader = ({
     height={size}
     viewBox="0 0 24 24"
     fill="none"
-    stroke="currentColor"
+    stroke="url(#reader-gradient)"
     stroke-width={strokeWidth}
     stroke-linecap="round"
     stroke-linejoin="round"
     className={cn("lucide lucide-credit-card-reader preview-icon", className)}
   >
+    <defs>
+      <linearGradient id="reader-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stopColor="var(--dark-brown)" />
+        <stop offset="50%" stopColor="var(--caramel-leather)" />
+        <stop offset="100%" stopColor="var(--light-orange)" />
+      </linearGradient>
+    </defs>
     <path d="M15 16v1" />
     <path d="M16.963 7.734A1 1 0 0015.999 7H8.003a1 1 0 00-.964.734L4.073 18.467A2 2 0 006 21h12a2 2 0 001.927-2.532z" />
     <path d="M2.678 8.5A2 2 0 012 7V5a2 2 0 012-2h16a2 2 0 012 2v2a2 2 0 01-.676 1.499" />
@@ -136,26 +133,44 @@ const CreditCardX = ({
   strokeWidth: number;
   stroke?: string;
   className?: string;
-}) => (
+}) => {
+  const gradientId = React.useId();
+
+  return (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={size}
     height={size}
     viewBox="0 0 24 24"
     fill="none"
-    stroke="currentColor"
-    stroke-width={strokeWidth}
-    stroke-linecap="round"
-    stroke-linejoin="round"
+    stroke={`url(#${gradientId})`}
+    strokeWidth={strokeWidth}
+    strokeLinecap="round"
+    strokeLinejoin="round"
     className={cn("lucide lucide-credit-card-x preview-icon", className)}
   >
+    <defs>
+      <linearGradient
+        id={gradientId}
+        gradientUnits="userSpaceOnUse"
+        x1={0}
+        y1={0}
+        x2={24}
+        y2={0}
+      >
+        <stop offset="0%" stopColor="#833AB4" />
+        <stop offset="50%" stopColor="#FD1D1D" />
+        <stop offset="100%" stopColor="#FC9445" />
+      </linearGradient>
+    </defs>
     <path d="M12.5 19H4a2 2 0 01-2-2V7a2 2 0 012-2h16a2 2 0 012 2v3.5" />
     <path d="M2 10h20" />
     <path d="M6 14h2" />
     <path d="m16.5 14.5 5 5" />
     <path d="m21.5 14.5-5 5" />
   </svg>
-);
+  );
+};
 
 const CreditCardCheck = ({
   size,
@@ -166,22 +181,40 @@ const CreditCardCheck = ({
   strokeWidth: number;
   stroke?: string;
   className?: string;
-}) => (
+}) => {
+  const gradientId = React.useId();
+
+  return (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={size}
     height={size}
     viewBox="0 0 24 24"
     fill="none"
-    stroke="currentColor"
-    stroke-width={strokeWidth}
-    stroke-linecap="round"
-    stroke-linejoin="round"
+    stroke={`url(#${gradientId})`}
+    strokeWidth={strokeWidth}
+    strokeLinecap="round"
+    strokeLinejoin="round"
     className={cn("lucide lucide-credit-card-check preview-icon", className)}
   >
+    <defs>
+      <linearGradient
+        id={gradientId}
+        gradientUnits="userSpaceOnUse"
+        x1={0}
+        y1={0}
+        x2={24}
+        y2={0}
+      >
+        <stop offset="0%" stopColor="#2A7B9B" />
+        <stop offset="50%" stopColor="#57C785" />
+        <stop offset="100%" stopColor="#2DC90A" />
+      </linearGradient>
+    </defs>
     <path d="M12.5 19H4a2 2 0 01-2-2V7a2 2 0 012-2h16a2 2 0 012 2v4" />
     <path d="M2 10h20" />
     <path d="M6 14h2" />
     <path d="m16 17 2 2 4-4" />
   </svg>
-);
+  );
+};
