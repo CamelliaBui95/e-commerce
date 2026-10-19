@@ -52,31 +52,33 @@ interface CheckoutFormProps {
 const CheckoutForm: React.FC<CheckoutFormProps> = ({ paymentId, client }) => {
   const paymentMode = useSelector(paymentModeSelector);
 
-  const clientSecret = useMemo(
-    () =>
-      paymentService
-        .createPaymentSession(paymentId)
-        .then((res) => res.client_secret),
-    [paymentId]
-  );
+  const clientSecret = useMemo(() => {
+    if (paymentMode === "mock") return "";
+
+    paymentService
+      .createPaymentSession(paymentId)
+      .then((res) => res.client_secret);
+  }, [paymentId, paymentMode]);
 
   if (!paymentId || !client) return <></>;
 
-  if (paymentMode === "mock") return <MockPaymentForm />;
-
-  return (
-    <CheckoutFormProvider
-      stripe={stripePromise}
-      options={{
-        clientSecret,
-        defaultValues: {
-          email: client.email,
-        },
-      }}
-    >
-      <PaymentForm />
-    </CheckoutFormProvider>
-  );
+  if (paymentMode === "mock") {
+    return <MockPaymentForm paymentId={paymentId} />;
+  } else {
+    return (
+      <CheckoutFormProvider
+        stripe={stripePromise}
+        options={{
+          clientSecret,
+          defaultValues: {
+            email: client.email,
+          },
+        }}
+      >
+        <PaymentForm />
+      </CheckoutFormProvider>
+    );
+  }
 };
 
 export default CheckoutForm;

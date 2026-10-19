@@ -84,11 +84,13 @@ public class PaymentService {
         }
     }
 
-    public void updateMockPayment(Payment payment, MockPaymentReq mockPaymentReq) {
+    public String updateMockPayment(Payment payment, MockPaymentReq mockPaymentReq) {
         String mockSessionId = String.format("mock-%s", UUID.randomUUID().toString());
         payment.setStripePaymentSessionId(mockSessionId);
         paymentCRUDService.save(payment);
         this.updatePaymentStatus(payment, mockPaymentReq.status());
+
+        return mockSessionId;
     }
 
     public void publish(Topic topic, Payment payment) {

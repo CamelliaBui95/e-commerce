@@ -3,6 +3,7 @@ package camellia.ecommerce.payment_service.controllers;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +36,9 @@ public class PaymentController {
     private final PaymentCRUDService paymentCRUDService;
 
     private final PaymentMapper paymentMapper;
+
+    @Value("${stripe.return-url}")
+    private String returnUrl;
 
     @GetMapping
     public ResponseEntity<UUID> findPaymentId(@RequestParam("order_id") UUID orderId) {
@@ -71,11 +75,12 @@ public class PaymentController {
     }
 
     @PutMapping("/mock/update-payment")
-    public ResponseEntity<Void> updateMockPayment(@Valid @RequestBody MockPaymentReq mockPaymentReq) {
+    public ResponseEntity<String> updateMockPayment(@Valid @RequestBody MockPaymentReq mockPaymentReq) {
         try {
             Payment payment = paymentCRUDService.findByPublicId(mockPaymentReq.paymentId());
-            paymentService.updateMockPayment(payment, mockPaymentReq);
-            return ResponseEntity.ok().build();
+            String mockSessionId = paymentService.updateMockPayment(payment, mockPaymentReq);
+            String redirectTo = returnUrl.replace("{CHECKOUT_SESSION_ID}", mockSessionId);
+            return ResponseEntity.ok(redirectTo);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.internalServerError().build();
         }

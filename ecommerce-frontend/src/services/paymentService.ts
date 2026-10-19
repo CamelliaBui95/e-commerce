@@ -63,10 +63,14 @@ const getPaymentMode = async (): Promise<string> => {
 const updateMockPayment = async (
   paymentUpdateReq: MockPaymentReq
 ): Promise<void> => {
-  await paymentApi.put<void>(
+  const res = await paymentApi.put<string>(
     `${PAYMENTS_PREFIX}/mock/update-payment`,
     paymentUpdateReq
   );
+
+  const url = await res.data;
+
+  window.location.assign(url);
 };
 
 export default {
