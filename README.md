@@ -39,7 +39,7 @@ Each service owns a separate database in the local PostgreSQL instance. Docker C
 4. A mock payment submission or Stripe webhook updates the payment and publishes `PAYMENT_SUCCEEDED` or `PAYMENT_FAILED`.
 5. On success, inventory reservations are confirmed, stock is reduced, and the order service updates the order status. Order status changes reach the frontend through SSE.
 
-Failure compensation is not complete: the order and inventory services do not currently consume `PAYMENT_FAILED`.
+On `PAYMENT_FAILED`, the order service sets the order status to `PAYMENT_FAILED` and sends the update to the frontend through SSE. The inventory service marks the order's reservations as `RELEASED`, making those quantities available again without reducing product stock.
 
 ## Technology
 
@@ -129,7 +129,7 @@ Open http://localhost:5173. The example environment file points to the three loc
 
 Browse products, add items to the cart, and submit the checkout contact form. Once inventory is reserved and the payment is pending, select `SUCCEEDED` or `FAILED` in the mock payment form and confirm. The browser redirects to the checkout return page.
 
-Successful payments confirm reservations and reduce stock. Failed payments update the payment record, but currently leave the order status and inventory reservations unchanged.
+Successful payments confirm reservations and reduce stock. Failed payments update the payment record, set the order status to `PAYMENT_FAILED`, and release the order's inventory reservations through Kafka events.
 
 ## Payment configuration
 
@@ -228,7 +228,8 @@ pnpm build
 - **Missing database or schema:** initialization scripts run only when the PostgreSQL data volume is first created. An existing volume will not rerun them automatically.
 - **Missing Stripe property at startup:** set both `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET` in the terminal or IDE environment that launches the payment service.
 - **Missing product images:** supply the filenames referenced by the catalogue and verify `APP_PRODUCT_IMAGES_DIR`. Relative paths depend on the service's working directory.
-- **Stock remains reserved after a failed or abandoned checkout:** reservation release and expiry are not implemented yet.
+- **Stock remains reserved after a failed payment:** check that the payment service published `PAYMENT_FAILED` and that the order and inventory services are running and consuming the event. The inventory handler marks the affected reservations as `RELEASED`.
+- **Stock remains reserved after an abandoned checkout:** closing the browser alone does not release reservations. Release requires a `PAYMENT_FAILED` event, such as one produced when the payment service receives a Stripe session-expired webhook. There is no independent reservation-expiry job.
 
 Stop the applications with `Ctrl+C` in their terminals, then stop infrastructure with:
 
