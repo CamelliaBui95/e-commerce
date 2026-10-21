@@ -133,16 +133,54 @@ Successful payments confirm reservations and reduce stock. Failed payments updat
 
 ## Payment configuration
 
-| Variable | Purpose |
+| Setting | Purpose |
 | --- | --- |
-| `APP_PAYMENT_MODE` | `mock` selects the simulated payment form; use `stripe` for the Stripe form |
-| `STRIPE_SECRET_KEY` | Backend Stripe API key; required even in mock mode |
-| `STRIPE_WEBHOOK_SECRET` | Backend webhook signing secret; required even in mock mode |
-| `STRIPE_CURRENCY` | Payment currency; defaults to `eur` |
-| `STRIPE_RETURN_URL` | Defaults to `http://localhost:5173/checkout/return?session_id={CHECKOUT_SESSION_ID}` |
+| `app.payment-mode` | `mock` selects the simulated payment form; use `stripe` for the Stripe form |
+| `stripe.secret-key` | Backend Stripe API key; required even in mock mode |
+| `stripe.webhook-secret` | Backend webhook signing secret; required even in mock mode |
+| `stripe.currency` | Payment currency; defaults to `eur` |
+| `stripe.return-url` | Defaults to `http://localhost:5173/checkout/return?session_id={CHECKOUT_SESSION_ID}` |
 | `VITE_STRIPE_PUBLISHABLE_KEY` | Frontend publishable key in `ecommerce-frontend/.env` |
 
-For Stripe development, replace the mock placeholders with test credentials, set `APP_PAYMENT_MODE=stripe`, and configure webhook delivery to `POST /payments/webhook` on port 8083. The handler accepts `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.async_payment_failed`, and `checkout.session.expired`. Backend secret keys belong in the backend environment, never in `VITE_*` variables.
+### Enable Stripe Checkout (sandbox)
+
+1. [Sign up for a Stripe account](https://dashboard.stripe.com/register) and select a sandbox in the Stripe Dashboard. Get the secret key (`sk_test_...`) and publishable key (`pk_test_...`) for that sandbox.
+2. In `payment-service/src/main/resources/application.properties`, replace the existing payment mode and secret-key settings with your sandbox values:
+
+   ```properties
+   app.payment-mode=stripe
+   stripe.secret-key=sk_test_replace_with_your_sandbox_key
+   ```
+
+3. In `ecommerce-frontend/.env`, enter the publishable key from the same sandbox:
+
+   ```dotenv
+   VITE_STRIPE_PUBLISHABLE_KEY=pk_test_replace_with_your_sandbox_key
+   ```
+
+4. Install the CLI using the [Stripe CLI instructions](https://docs.stripe.com/cli). Open Command Prompt (`cmd`) and authenticate:
+
+   ```cmd
+   stripe login
+   ```
+
+   Make sure the CLI uses the same sandbox as your API keys. Then start forwarding webhook events to the local payment service:
+
+   ```cmd
+   stripe listen --forward-to http://localhost:8083/payments/webhook
+   ```
+
+5. Copy the webhook signing secret (`whsec_...`) printed by `stripe listen` and add it directly to `payment-service/src/main/resources/application.properties`:
+
+   ```properties
+   stripe.webhook-secret=whsec_replace_with_the_cli_signing_secret
+   ```
+
+   This is the listener's signing secret, separate from your Stripe API secret key.
+
+6. Restart the payment service and the frontend after changing their configuration. Remove any conflicting `APP_PAYMENT_MODE`, `STRIPE_SECRET_KEY`, or `STRIPE_WEBHOOK_SECRET` overrides from your terminal or IDE launch configuration so the properties file values take effect. Keep `stripe listen` running while testing checkout so Stripe can deliver payment events to your local service.
+
+The webhook handler accepts `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.async_payment_failed`, and `checkout.session.expired`. Keep backend secrets out of Git and `VITE_*` variables; only the publishable key belongs in the frontend.
 
 The Stripe frontend still needs a fix before this path can work: `CheckoutForm.tsx` starts the session request inside `useMemo` but does not return its promise, leaving the provider's `clientSecret` undefined.
 
