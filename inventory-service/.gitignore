@@ -32,4 +32,27 @@ build/
 ### VS Code ###
 .vscode/
 
-/data/
+# Keep runtime data and uploads local; include only the seeded catalogue images.
+/data/*
+!/data/product-images/
+/data/product-images/*
+!/data/product-images/canvas-sneakers.png
+!/data/product-images/canvas-tote-bag.png
+!/data/product-images/ceramic-coffee-mug.png
+!/data/product-images/classic-cotton-tshirt.png
+!/data/product-images/cotton-trousers.png
+!/data/product-images/knitted-wool-cardigan.png
+!/data/product-images/leather-crossbody-bag.png
+!/data/product-images/leather-packbag.png
+!/data/product-images/linen-cushion-cover.png
+!/data/product-images/linen-summer-shirt.png
+!/data/product-images/minimalist-watch.png
+!/data/product-images/portable-bluetooth-speaker.png
+!/data/product-images/portable-table-fan.png
+!/data/product-images/retro-sunglasses.png
+!/data/product-images/scented-soy-candle.png
+!/data/product-images/stoneware-serving-bowl.png
+!/data/product-images/wireless-headphones.png
+!/data/product-images/wireless-keyboard.png
+!/data/product-images/wooden-desk-lamp.png
+!/data/product-images/woven-throw-blanket.png
