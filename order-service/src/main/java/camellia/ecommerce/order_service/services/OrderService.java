@@ -91,6 +91,11 @@ public class OrderService {
         handlePaymentEvents(event, OrderStatus.PAYMENT_SUCCEEDED);
     }
 
+    @KafkaListener(topics = "PAYMENT_FAILED", containerFactory = "paymentEventKafkaListenerContainerFactory")
+    public void handlePaymentFailed(PaymentEvent event) {
+        handlePaymentEvents(event, OrderStatus.PAYMENT_FAILED);
+    }
+
     public void publishOrderCreatedEvent(Order order) {
 
         OrderEvent orderEvent = orderMapper.toEvent(order);

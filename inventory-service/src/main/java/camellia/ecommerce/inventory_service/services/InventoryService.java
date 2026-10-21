@@ -82,6 +82,16 @@ public class InventoryService {
         productService.updateStocks(numberReservedByProductId);
     }
 
+    @KafkaListener(topics = "PAYMENT_FAILED", containerFactory = "paymentEventKafkaListenerContainerFactory")
+    public void handlePaymentFailedEvent(PaymentEvent paymentEvent) {
+        UUID orderId = paymentEvent.orderId();
+        List<InventoryReservation> inventoryReservations = inventoryReservationService.findByOrderId(orderId);
+
+        List<Long> reservationIds = inventoryReservations.stream().map(ir -> ir.getId()).toList();
+
+        inventoryReservationService.updateReservationStatus(reservationIds, ReservationStatus.RELEASED);
+    }
+
     public void publishInventoryReservedEvent(UUID orderId, List<OrderItemEvent> availableItems,
             List<OrderItemEvent> unavailableItems) {
 
